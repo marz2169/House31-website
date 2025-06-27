@@ -9,8 +9,63 @@
         "testStrategy": "Verify all dependencies install correctly and the project structure is set up according to best practices. Run both frontend and backend to ensure they start without errors.",
         "priority": "high",
         "dependencies": [],
-        "status": "pending",
-        "subtasks": []
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Initialize Project Repository and Directories",
+            "description": "Create a new project repository and set up the initial directory structure for both frontend and backend.",
+            "dependencies": [],
+            "details": "Create a new repository, add a root folder, and within it, create 'frontend' and 'backend' directories to separate client and server code.",
+            "status": "done",
+            "testStrategy": "Verify that the repository exists with the correct folder structure: root, frontend, and backend directories."
+          },
+          {
+            "id": 2,
+            "title": "Set Up React Frontend with Vite",
+            "description": "Initialize the frontend using Vite with the React template and install required dependencies.",
+            "dependencies": [
+              1
+            ],
+            "details": "Run 'npm create vite@latest frontend -- --template react' inside the repository, then install dependencies: react-router-dom, tailwindcss, @tailwindcss/typography, framer-motion, iconify/react, @radix-ui/react-icons, react-player. Follow the shadcn/ui installation guide.",
+            "status": "done",
+            "testStrategy": "Start the Vite dev server and confirm the React app runs. Check that all dependencies are listed in package.json."
+          },
+          {
+            "id": 3,
+            "title": "Configure Tailwind CSS and shadcn/ui in Frontend",
+            "description": "Set up Tailwind CSS and integrate shadcn/ui in the React frontend.",
+            "dependencies": [
+              2
+            ],
+            "details": "Configure Tailwind CSS according to its documentation, ensuring it works with Vite and React. Complete shadcn/ui installation and verify integration.",
+            "status": "done",
+            "testStrategy": "Add a sample component using Tailwind and shadcn/ui styles, then confirm styles render correctly in the browser."
+          },
+          {
+            "id": 4,
+            "title": "Set Up Node.js/Express Backend",
+            "description": "Initialize the backend with npm, install dependencies, and create the basic Express server structure.",
+            "dependencies": [
+              1
+            ],
+            "details": "Inside the backend directory, run 'npm init -y' and install express, mongoose, cors, dotenv. Create an entry point (e.g., index.js) with a basic Express server setup.",
+            "status": "done",
+            "testStrategy": "Start the backend server and verify it responds to a test route (e.g., GET /api/health returns a status message)."
+          },
+          {
+            "id": 5,
+            "title": "Establish Project-wide Code Quality Tools",
+            "description": "Set up ESLint and Prettier for both frontend and backend to enforce code quality and consistency.",
+            "dependencies": [
+              2,
+              4
+            ],
+            "details": "Install and configure ESLint and Prettier in both frontend and backend directories. Add configuration files and ensure they are compatible with React and Node.js codebases.",
+            "status": "done",
+            "testStrategy": "Run lint and format scripts in both frontend and backend; confirm that code is checked and auto-formatted without errors."
+          }
+        ]
       },
       {
         "id": 2,
@@ -214,7 +269,7 @@
     ],
     "metadata": {
       "created": "2025-06-27T10:36:43.668Z",
-      "updated": "2025-06-27T10:37:50.348Z",
+      "updated": "2025-06-27T11:06:38.479Z",
       "description": "Tasks for master context"
     }
   }
