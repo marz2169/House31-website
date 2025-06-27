@@ -1,0 +1,221 @@
+{
+  "master": {
+    "tasks": [
+      {
+        "id": 1,
+        "title": "Setup Project Repository and Structure",
+        "description": "Initialize the project repository with Vite for React frontend and set up the Node.js/Express backend structure.",
+        "details": "1. Create a new project repository\n2. Initialize frontend with Vite: `npm create vite@latest frontend -- --template react`\n3. Set up backend directory: `mkdir backend`\n4. Initialize backend: `cd backend && npm init -y`\n5. Install backend dependencies: `npm install express mongoose cors dotenv`\n6. Install frontend dependencies: `cd ../frontend && npm install react-router-dom tailwindcss @tailwindcss/typography framer-motion iconify/react @radix-ui/react-icons react-player`\n7. Set up shadcn/ui: Follow installation guide at https://ui.shadcn.com/docs/installation\n8. Configure Tailwind CSS\n9. Create basic folder structure for both frontend and backend\n10. Set up ESLint and Prettier for code quality",
+        "testStrategy": "Verify all dependencies install correctly and the project structure is set up according to best practices. Run both frontend and backend to ensure they start without errors.",
+        "priority": "high",
+        "dependencies": [],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 2,
+        "title": "Setup MongoDB and Mongoose Schema",
+        "description": "Set up MongoDB connection and create the Mongoose schema for content posts as specified in the PRD.",
+        "details": "1. Create MongoDB Atlas account if not already available\n2. Set up a new cluster and database\n3. Create a `.env` file in the backend directory with MongoDB connection string\n4. Create `models/Post.js` with the following schema:\n```js\nconst mongoose = require('mongoose');\nconst slugify = require('slugify');\n\nconst PostSchema = new mongoose.Schema({\n  title: { type: String, required: true },\n  slug: { type: String, unique: true },\n  category: { type: String, enum: ['news', 'videos', 'entertainment'], required: true },\n  thumbnailUrl: { type: String, required: true },\n  videoUrl: { type: String },\n  content: { type: String, required: true },\n  tags: [String],\n  createdAt: { type: Date, default: Date.now },\n  updatedAt: { type: Date, default: Date.now },\n  isTrending: { type: Boolean, default: false }\n});\n\n// Pre-save hook to generate slug from title\nPostSchema.pre('save', function(next) {\n  if (!this.slug) {\n    this.slug = slugify(this.title, { lower: true, strict: true });\n  }\n  this.updatedAt = Date.now();\n  next();\n});\n\nmodule.exports = mongoose.model('Post', PostSchema);\n```\n5. Create database connection utility in `config/db.js`\n6. Add connection logic to server startup",
+        "testStrategy": "Test MongoDB connection by connecting to the database and verifying no errors. Create a test post document to ensure the schema works correctly, especially the slug generation and required fields validation.",
+        "priority": "high",
+        "dependencies": [
+          1
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 3,
+        "title": "Implement Backend API Routes",
+        "description": "Create RESTful API endpoints for posts as specified in the PRD, including GET, POST, PUT, and DELETE operations.",
+        "details": "1. Create `routes/posts.js` to handle all post-related routes\n2. Implement the following endpoints:\n   - GET /api/posts (with pagination)\n   - GET /api/posts/:slug (single post)\n   - GET /api/posts?category=news (filter by category)\n   - GET /api/trending (top 10 trending)\n   - POST /api/posts (add post, admin only)\n   - PUT /api/posts/:id (update post)\n   - DELETE /api/posts/:id (delete post)\n3. Create controllers in `controllers/posts.js` with the following functions:\n   - getPosts (with pagination and filtering)\n   - getPostBySlug\n   - getTrendingPosts\n   - createPost\n   - updatePost\n   - deletePost\n4. Implement basic error handling and validation\n5. Set up CORS to allow frontend requests\n6. Create a simple middleware for admin routes (can be basic for MVP)",
+        "testStrategy": "Use Postman or similar tool to test all API endpoints. Verify each endpoint returns the correct data format and status codes. Test pagination, filtering, and error handling. Create test data to verify CRUD operations work correctly.",
+        "priority": "high",
+        "dependencies": [
+          2
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 4,
+        "title": "Setup Frontend Routing and Layout",
+        "description": "Set up React Router DOM for frontend navigation and create the basic layout components.",
+        "details": "1. Create a basic layout structure with components:\n   - `components/layout/Header.jsx`\n   - `components/layout/Footer.jsx`\n   - `components/layout/Layout.jsx` (wrapper component)\n2. Set up React Router in `App.jsx`:\n```jsx\nimport { BrowserRouter, Routes, Route } from 'react-router-dom';\nimport Layout from './components/layout/Layout';\nimport HomePage from './pages/HomePage';\nimport CategoryPage from './pages/CategoryPage';\nimport PostPage from './pages/PostPage';\nimport VideoPage from './pages/VideoPage';\nimport AdminPage from './pages/AdminPage';\n\nfunction App() {\n  return (\n    <BrowserRouter>\n      <Routes>\n        <Route path=\"/\" element={<Layout />}>\n          <Route index element={<HomePage />} />\n          <Route path=\"/news\" element={<CategoryPage category=\"news\" />} />\n          <Route path=\"/videos\" element={<VideoPage />} />\n          <Route path=\"/entertainment\" element={<CategoryPage category=\"entertainment\" />} />\n          <Route path=\"/post/:slug\" element={<PostPage />} />\n          <Route path=\"/admin\" element={<AdminPage />} />\n        </Route>\n      </Routes>\n    </BrowserRouter>\n  );\n}\n\nexport default App;\n```\n3. Create placeholder page components for all routes\n4. Implement responsive navigation with shadcn/ui components\n5. Add Iconify icons for navigation items",
+        "testStrategy": "Test all routes to ensure they render the correct components. Verify navigation works between pages. Test responsive behavior on different screen sizes. Ensure layout components (header, footer) appear consistently across all pages.",
+        "priority": "high",
+        "dependencies": [
+          1
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 5,
+        "title": "Create API Service Layer",
+        "description": "Implement a service layer to handle API requests from the frontend to the backend.",
+        "details": "1. Create `services/api.js` with functions to interact with the backend API\n2. Implement the following functions:\n```js\nconst API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';\n\nexport const fetchPosts = async (page = 1, limit = 10, category = null) => {\n  let url = `${API_URL}/posts?page=${page}&limit=${limit}`;\n  if (category) url += `&category=${category}`;\n  const response = await fetch(url);\n  if (!response.ok) throw new Error('Failed to fetch posts');\n  return response.json();\n};\n\nexport const fetchPostBySlug = async (slug) => {\n  const response = await fetch(`${API_URL}/posts/${slug}`);\n  if (!response.ok) throw new Error('Failed to fetch post');\n  return response.json();\n};\n\nexport const fetchTrendingPosts = async () => {\n  const response = await fetch(`${API_URL}/trending`);\n  if (!response.ok) throw new Error('Failed to fetch trending posts');\n  return response.json();\n};\n\nexport const createPost = async (postData) => {\n  const response = await fetch(`${API_URL}/posts`, {\n    method: 'POST',\n    headers: { 'Content-Type': 'application/json' },\n    body: JSON.stringify(postData),\n  });\n  if (!response.ok) throw new Error('Failed to create post');\n  return response.json();\n};\n\nexport const updatePost = async (id, postData) => {\n  const response = await fetch(`${API_URL}/posts/${id}`, {\n    method: 'PUT',\n    headers: { 'Content-Type': 'application/json' },\n    body: JSON.stringify(postData),\n  });\n  if (!response.ok) throw new Error('Failed to update post');\n  return response.json();\n};\n\nexport const deletePost = async (id) => {\n  const response = await fetch(`${API_URL}/posts/${id}`, {\n    method: 'DELETE',\n  });\n  if (!response.ok) throw new Error('Failed to delete post');\n  return response.json();\n};\n```\n3. Create custom hooks for data fetching in `hooks/useApi.js`\n4. Implement error handling and loading states",
+        "testStrategy": "Test each API function with mock data to ensure they correctly format requests and handle responses. Verify error handling works as expected. Test with the actual backend once it's available.",
+        "priority": "high",
+        "dependencies": [
+          3,
+          4
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 6,
+        "title": "Implement Homepage",
+        "description": "Create the homepage with hero article, trending section, and category blocks for News, Videos, and Entertainment.",
+        "details": "1. Create components for homepage sections:\n   - `components/home/HeroArticle.jsx`\n   - `components/home/TrendingSection.jsx`\n   - `components/home/CategoryBlock.jsx`\n2. Implement the HomePage component to fetch and display data:\n```jsx\nimport { useState, useEffect } from 'react';\nimport { fetchPosts, fetchTrendingPosts } from '../services/api';\nimport HeroArticle from '../components/home/HeroArticle';\nimport TrendingSection from '../components/home/TrendingSection';\nimport CategoryBlock from '../components/home/CategoryBlock';\n\nfunction HomePage() {\n  const [heroPost, setHeroPost] = useState(null);\n  const [trendingPosts, setTrendingPosts] = useState([]);\n  const [newsPosts, setNewsPosts] = useState([]);\n  const [videoPosts, setVideoPosts] = useState([]);\n  const [entertainmentPosts, setEntertainmentPosts] = useState([]);\n  const [loading, setLoading] = useState(true);\n  const [error, setError] = useState(null);\n\n  useEffect(() => {\n    const loadData = async () => {\n      try {\n        setLoading(true);\n        // Fetch trending posts\n        const trending = await fetchTrendingPosts();\n        setTrendingPosts(trending);\n        \n        // Set hero post as first trending post\n        if (trending.length > 0) setHeroPost(trending[0]);\n        \n        // Fetch category posts\n        const news = await fetchPosts(1, 6, 'news');\n        const videos = await fetchPosts(1, 6, 'videos');\n        const entertainment = await fetchPosts(1, 6, 'entertainment');\n        \n        setNewsPosts(news.posts);\n        setVideoPosts(videos.posts);\n        setEntertainmentPosts(entertainment.posts);\n      } catch (err) {\n        setError(err.message);\n      } finally {\n        setLoading(false);\n      }\n    };\n    \n    loadData();\n  }, []);\n\n  if (loading) return <div>Loading...</div>;\n  if (error) return <div>Error: {error}</div>;\n\n  return (\n    <div className=\"container mx-auto px-4 py-8\">\n      {heroPost && <HeroArticle post={heroPost} />}\n      \n      <TrendingSection posts={trendingPosts} />\n      \n      <div className=\"grid grid-cols-1 md:grid-cols-3 gap-8 mt-12\">\n        <CategoryBlock title=\"News\" posts={newsPosts} category=\"news\" />\n        <CategoryBlock title=\"Videos\" posts={videoPosts} category=\"videos\" />\n        <CategoryBlock title=\"Entertainment\" posts={entertainmentPosts} category=\"entertainment\" />\n      </div>\n    </div>\n  );\n}\n\nexport default HomePage;\n```\n3. Style components using Tailwind CSS and shadcn/ui\n4. Implement responsive design for all screen sizes\n5. Add lazy loading for images using Intersection Observer API",
+        "testStrategy": "Test the homepage with mock data to ensure all sections render correctly. Verify responsive behavior on different screen sizes. Test with actual API data once available. Verify lazy loading works for images.",
+        "priority": "high",
+        "dependencies": [
+          5
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 7,
+        "title": "Implement Category Pages",
+        "description": "Create paginated category pages for News, Videos, and Entertainment sections.",
+        "details": "1. Create a reusable CategoryPage component that works for both News and Entertainment:\n```jsx\nimport { useState, useEffect } from 'react';\nimport { useParams, useSearchParams } from 'react-router-dom';\nimport { fetchPosts } from '../services/api';\nimport PostCard from '../components/shared/PostCard';\nimport Pagination from '../components/shared/Pagination';\n\nfunction CategoryPage({ category: propCategory }) {\n  const { category: paramCategory } = useParams();\n  const [searchParams, setSearchParams] = useSearchParams();\n  const category = propCategory || paramCategory;\n  const page = parseInt(searchParams.get('page') || '1');\n  \n  const [posts, setPosts] = useState([]);\n  const [totalPages, setTotalPages] = useState(1);\n  const [loading, setLoading] = useState(true);\n  const [error, setError] = useState(null);\n\n  useEffect(() => {\n    const loadPosts = async () => {\n      try {\n        setLoading(true);\n        const data = await fetchPosts(page, 12, category);\n        setPosts(data.posts);\n        setTotalPages(data.totalPages);\n      } catch (err) {\n        setError(err.message);\n      } finally {\n        setLoading(false);\n      }\n    };\n    \n    loadPosts();\n  }, [category, page]);\n\n  const handlePageChange = (newPage) => {\n    setSearchParams({ page: newPage.toString() });\n  };\n\n  if (loading) return <div>Loading...</div>;\n  if (error) return <div>Error: {error}</div>;\n\n  return (\n    <div className=\"container mx-auto px-4 py-8\">\n      <h1 className=\"text-3xl font-bold mb-8 capitalize\">{category}</h1>\n      \n      <div className=\"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6\">\n        {posts.map(post => (\n          <PostCard key={post._id} post={post} />\n        ))}\n      </div>\n      \n      <Pagination \n        currentPage={page} \n        totalPages={totalPages} \n        onPageChange={handlePageChange} \n      />\n    </div>\n  );\n}\n\nexport default CategoryPage;\n```\n2. Create a separate VideoPage component with grid layout for videos\n3. Implement a reusable PostCard component for displaying post previews\n4. Create a Pagination component for navigating between pages\n5. Style all components with Tailwind CSS and shadcn/ui",
+        "testStrategy": "Test category pages with different categories to ensure they display the correct content. Test pagination to verify it works correctly. Verify responsive behavior on different screen sizes. Test with actual API data once available.",
+        "priority": "medium",
+        "dependencies": [
+          5
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 8,
+        "title": "Implement Post Detail Page",
+        "description": "Create the post detail page that displays a single post with title, cover image, content, embedded video (if applicable), and share buttons.",
+        "details": "1. Create the PostPage component:\n```jsx\nimport { useState, useEffect } from 'react';\nimport { useParams } from 'react-router-dom';\nimport { fetchPostBySlug } from '../services/api';\nimport ReactPlayer from 'react-player';\nimport ShareButtons from '../components/shared/ShareButtons';\n\nfunction PostPage() {\n  const { slug } = useParams();\n  const [post, setPost] = useState(null);\n  const [loading, setLoading] = useState(true);\n  const [error, setError] = useState(null);\n\n  useEffect(() => {\n    const loadPost = async () => {\n      try {\n        setLoading(true);\n        const data = await fetchPostBySlug(slug);\n        setPost(data);\n      } catch (err) {\n        setError(err.message);\n      } finally {\n        setLoading(false);\n      }\n    };\n    \n    loadPost();\n  }, [slug]);\n\n  if (loading) return <div>Loading...</div>;\n  if (error) return <div>Error: {error}</div>;\n  if (!post) return <div>Post not found</div>;\n\n  return (\n    <div className=\"container mx-auto px-4 py-8 max-w-4xl\">\n      <h1 className=\"text-4xl font-bold mb-4\">{post.title}</h1>\n      \n      <div className=\"mb-6\">\n        <img \n          src={post.thumbnailUrl} \n          alt={post.title} \n          className=\"w-full h-auto rounded-lg\"\n        />\n      </div>\n      \n      {post.videoUrl && (\n        <div className=\"mb-6\">\n          <ReactPlayer \n            url={post.videoUrl} \n            width=\"100%\"\n            height=\"480px\"\n            controls\n          />\n        </div>\n      )}\n      \n      <div className=\"mb-8\">\n        <ShareButtons url={window.location.href} title={post.title} />\n      </div>\n      \n      <div \n        className=\"prose max-w-none\"\n        dangerouslySetInnerHTML={{ __html: post.content }}\n      />\n      \n      <div className=\"mt-8\">\n        <div className=\"flex flex-wrap gap-2\">\n          {post.tags.map(tag => (\n            <span \n              key={tag} \n              className=\"bg-gray-200 px-3 py-1 rounded-full text-sm\"\n            >\n              {tag}\n            </span>\n          ))}\n        </div>\n      </div>\n    </div>\n  );\n}\n\nexport default PostPage;\n```\n2. Create a ShareButtons component for social media sharing\n3. Implement proper HTML sanitization for content (consider using DOMPurify)\n4. Style the page with Tailwind CSS and @tailwindcss/typography for content\n5. Add Open Graph meta tags for better sharing experience",
+        "testStrategy": "Test the post detail page with different types of posts (with/without video). Verify content renders correctly and safely. Test share buttons functionality. Verify responsive behavior on different screen sizes. Test with actual API data once available.",
+        "priority": "high",
+        "dependencies": [
+          5
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 9,
+        "title": "Implement Video Page",
+        "description": "Create a dedicated video page with grid layout, embedded videos, and thumbnail previews.",
+        "details": "1. Create the VideoPage component:\n```jsx\nimport { useState, useEffect } from 'react';\nimport { useSearchParams } from 'react-router-dom';\nimport { fetchPosts } from '../services/api';\nimport VideoCard from '../components/video/VideoCard';\nimport Pagination from '../components/shared/Pagination';\n\nfunction VideoPage() {\n  const [searchParams, setSearchParams] = useSearchParams();\n  const page = parseInt(searchParams.get('page') || '1');\n  \n  const [videos, setVideos] = useState([]);\n  const [totalPages, setTotalPages] = useState(1);\n  const [loading, setLoading] = useState(true);\n  const [error, setError] = useState(null);\n\n  useEffect(() => {\n    const loadVideos = async () => {\n      try {\n        setLoading(true);\n        const data = await fetchPosts(page, 12, 'videos');\n        setVideos(data.posts);\n        setTotalPages(data.totalPages);\n      } catch (err) {\n        setError(err.message);\n      } finally {\n        setLoading(false);\n      }\n    };\n    \n    loadVideos();\n  }, [page]);\n\n  const handlePageChange = (newPage) => {\n    setSearchParams({ page: newPage.toString() });\n  };\n\n  if (loading) return <div>Loading...</div>;\n  if (error) return <div>Error: {error}</div>;\n\n  return (\n    <div className=\"container mx-auto px-4 py-8\">\n      <h1 className=\"text-3xl font-bold mb-8\">Videos</h1>\n      \n      <div className=\"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6\">\n        {videos.map(video => (\n          <VideoCard key={video._id} video={video} />\n        ))}\n      </div>\n      \n      <Pagination \n        currentPage={page} \n        totalPages={totalPages} \n        onPageChange={handlePageChange} \n      />\n    </div>\n  );\n}\n\nexport default VideoPage;\n```\n2. Create a VideoCard component for displaying video previews:\n```jsx\nimport { useState } from 'react';\nimport { Link } from 'react-router-dom';\nimport ReactPlayer from 'react-player';\n\nfunction VideoCard({ video }) {\n  const [isPlaying, setIsPlaying] = useState(false);\n  \n  return (\n    <div className=\"bg-white rounded-lg shadow-md overflow-hidden\">\n      <div className=\"relative aspect-video\">\n        {isPlaying ? (\n          <ReactPlayer \n            url={video.videoUrl} \n            width=\"100%\"\n            height=\"100%\"\n            playing={isPlaying}\n            controls\n            onEnded={() => setIsPlaying(false)}\n          />\n        ) : (\n          <div \n            className=\"w-full h-full cursor-pointer relative\"\n            onClick={() => setIsPlaying(true)}\n          >\n            <img \n              src={video.thumbnailUrl} \n              alt={video.title} \n              className=\"w-full h-full object-cover\"\n            />\n            <div className=\"absolute inset-0 flex items-center justify-center\">\n              <div className=\"w-16 h-16 bg-red-600 rounded-full flex items-center justify-center\">\n                <svg className=\"w-8 h-8 text-white\" fill=\"currentColor\" viewBox=\"0 0 24 24\">\n                  <path d=\"M8 5v14l11-7z\" />\n                </svg>\n              </div>\n            </div>\n          </div>\n        )}\n      </div>\n      \n      <div className=\"p-4\">\n        <Link to={`/post/${video.slug}`} className=\"text-xl font-semibold hover:text-blue-600\">\n          {video.title}\n        </Link>\n        <p className=\"text-gray-500 mt-2\">\n          {new Date(video.createdAt).toLocaleDateString()}\n        </p>\n      </div>\n    </div>\n  );\n}\n\nexport default VideoCard;\n```\n3. Implement lazy loading for video thumbnails\n4. Add play/pause functionality for video previews\n5. Style with Tailwind CSS and shadcn/ui",
+        "testStrategy": "Test the video page with different videos to ensure they display correctly. Test video playback functionality. Verify responsive behavior on different screen sizes. Test pagination. Test with actual API data once available.",
+        "priority": "medium",
+        "dependencies": [
+          5
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 10,
+        "title": "Implement Trending Section",
+        "description": "Create a trending section that displays the top 10 trending posts marked as isTrending.",
+        "details": "1. Create the TrendingSection component:\n```jsx\nimport { Link } from 'react-router-dom';\n\nfunction TrendingSection({ posts }) {\n  if (!posts || posts.length === 0) return null;\n  \n  return (\n    <div className=\"my-12\">\n      <h2 className=\"text-2xl font-bold mb-6\">Trending</h2>\n      \n      <div className=\"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4\">\n        {posts.slice(0, 10).map((post, index) => (\n          <Link \n            key={post._id} \n            to={`/post/${post.slug}`}\n            className={`relative overflow-hidden rounded-lg ${index === 0 ? 'lg:col-span-2 lg:row-span-2' : ''}`}\n          >\n            <div className=\"aspect-video w-full\">\n              <img \n                src={post.thumbnailUrl} \n                alt={post.title} \n                className=\"w-full h-full object-cover\"\n              />\n            </div>\n            <div className=\"absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex flex-col justify-end p-4\">\n              <h3 className=\"text-white font-semibold\">{post.title}</h3>\n              <span className=\"text-white/80 text-sm\">{post.category}</span>\n            </div>\n          </Link>\n        ))}\n      </div>\n    </div>\n  );\n}\n\nexport default TrendingSection;\n```\n2. Optionally, implement a carousel for the trending section using a library like Swiper or a custom solution\n3. Add hover effects and transitions using Tailwind CSS\n4. Ensure responsive behavior for all screen sizes\n5. Add category badges to trending items",
+        "testStrategy": "Test the trending section with different numbers of posts to ensure it displays correctly. Verify responsive behavior on different screen sizes. Test hover effects and transitions. Test with actual API data once available.",
+        "priority": "medium",
+        "dependencies": [
+          6
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 11,
+        "title": "Implement Admin Interface",
+        "description": "Create a minimal admin interface for adding, editing, and deleting posts.",
+        "details": "1. Create the AdminPage component:\n```jsx\nimport { useState, useEffect } from 'react';\nimport { fetchPosts, deletePost } from '../services/api';\nimport AdminPostForm from '../components/admin/AdminPostForm';\nimport AdminPostList from '../components/admin/AdminPostList';\n\nfunction AdminPage() {\n  const [posts, setPosts] = useState([]);\n  const [selectedPost, setSelectedPost] = useState(null);\n  const [loading, setLoading] = useState(true);\n  const [error, setError] = useState(null);\n\n  const loadPosts = async () => {\n    try {\n      setLoading(true);\n      const data = await fetchPosts(1, 100); // Load more posts for admin\n      setPosts(data.posts);\n    } catch (err) {\n      setError(err.message);\n    } finally {\n      setLoading(false);\n    }\n  };\n\n  useEffect(() => {\n    loadPosts();\n  }, []);\n\n  const handleEdit = (post) => {\n    setSelectedPost(post);\n  };\n\n  const handleDelete = async (id) => {\n    if (window.confirm('Are you sure you want to delete this post?')) {\n      try {\n        await deletePost(id);\n        loadPosts(); // Reload posts after deletion\n      } catch (err) {\n        setError(err.message);\n      }\n    }\n  };\n\n  const handleFormSubmit = () => {\n    setSelectedPost(null);\n    loadPosts(); // Reload posts after submission\n  };\n\n  if (loading) return <div>Loading...</div>;\n  if (error) return <div>Error: {error}</div>;\n\n  return (\n    <div className=\"container mx-auto px-4 py-8\">\n      <h1 className=\"text-3xl font-bold mb-8\">Admin Dashboard</h1>\n      \n      <div className=\"grid grid-cols-1 lg:grid-cols-2 gap-8\">\n        <div>\n          <h2 className=\"text-xl font-semibold mb-4\">\n            {selectedPost ? 'Edit Post' : 'Add New Post'}\n          </h2>\n          <AdminPostForm \n            post={selectedPost} \n            onSubmit={handleFormSubmit} \n          />\n        </div>\n        \n        <div>\n          <h2 className=\"text-xl font-semibold mb-4\">Posts</h2>\n          <AdminPostList \n            posts={posts} \n            onEdit={handleEdit} \n            onDelete={handleDelete} \n          />\n        </div>\n      </div>\n    </div>\n  );\n}\n\nexport default AdminPage;\n```\n2. Create the AdminPostForm component for adding/editing posts\n3. Create the AdminPostList component for displaying and managing posts\n4. Implement form validation and error handling\n5. Add rich text editor for post content (optional, can use simple textarea for MVP)\n6. Style with Tailwind CSS and shadcn/ui",
+        "testStrategy": "Test the admin interface with CRUD operations to ensure they work correctly. Test form validation and error handling. Verify the interface is usable and functional. Test with actual API data once available.",
+        "priority": "medium",
+        "dependencies": [
+          5
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 12,
+        "title": "Implement Search Functionality (Phase 2)",
+        "description": "Add search functionality to allow users to search for posts by keywords in titles and tags.",
+        "details": "1. Add a search endpoint to the backend API:\n```js\n// In routes/posts.js\nrouter.get('/search', postsController.searchPosts);\n\n// In controllers/posts.js\nexports.searchPosts = async (req, res) => {\n  try {\n    const { q } = req.query;\n    if (!q) return res.status(400).json({ message: 'Search query is required' });\n    \n    const posts = await Post.find({\n      $or: [\n        { title: { $regex: q, $options: 'i' } },\n        { tags: { $regex: q, $options: 'i' } }\n      ]\n    }).limit(20);\n    \n    res.json(posts);\n  } catch (error) {\n    res.status(500).json({ message: error.message });\n  }\n};\n```\n2. Add a search function to the API service:\n```js\nexport const searchPosts = async (query) => {\n  const response = await fetch(`${API_URL}/search?q=${encodeURIComponent(query)}`);\n  if (!response.ok) throw new Error('Failed to search posts');\n  return response.json();\n};\n```\n3. Create a SearchBar component:\n```jsx\nimport { useState } from 'react';\nimport { useNavigate } from 'react-router-dom';\n\nfunction SearchBar() {\n  const [query, setQuery] = useState('');\n  const navigate = useNavigate();\n\n  const handleSubmit = (e) => {\n    e.preventDefault();\n    if (query.trim()) {\n      navigate(`/search?q=${encodeURIComponent(query.trim())}`);\n    }\n  };\n\n  return (\n    <form onSubmit={handleSubmit} className=\"relative\">\n      <input\n        type=\"text\"\n        value={query}\n        onChange={(e) => setQuery(e.target.value)}\n        placeholder=\"Search...\"\n        className=\"w-full py-2 px-4 pr-10 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500\"\n      />\n      <button\n        type=\"submit\"\n        className=\"absolute right-3 top-1/2 transform -translate-y-1/2\"\n      >\n        <svg className=\"w-5 h-5 text-gray-500\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">\n          <path strokeLinecap=\"round\" strokeLinejoin=\"round\" strokeWidth={2} d=\"M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z\" />\n        </svg>\n      </button>\n    </form>\n  );\n}\n\nexport default SearchBar;\n```\n4. Create a SearchPage component to display search results\n5. Add the search route to React Router\n6. Add the SearchBar component to the Header",
+        "testStrategy": "Test the search functionality with different queries to ensure it returns relevant results. Test edge cases like empty queries and special characters. Verify the search UI works correctly. Test with actual API data once available.",
+        "priority": "low",
+        "dependencies": [
+          3,
+          4,
+          5
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 13,
+        "title": "Implement SEO Optimization",
+        "description": "Add SEO optimization features including meta titles/descriptions, Open Graph tags, and human-readable URLs.",
+        "details": "1. Install React Helmet for managing document head: `npm install react-helmet-async`\n2. Set up React Helmet in the app:\n```jsx\n// In main.jsx\nimport { HelmetProvider } from 'react-helmet-async';\n\nReactDOM.createRoot(document.getElementById('root')).render(\n  <React.StrictMode>\n    <HelmetProvider>\n      <App />\n    </HelmetProvider>\n  </React.StrictMode>,\n);\n```\n3. Create a SEO component:\n```jsx\nimport { Helmet } from 'react-helmet-async';\n\nfunction SEO({ title, description, image, url, type = 'website' }) {\n  const siteTitle = 'House 31';\n  const fullTitle = title ? `${title} | ${siteTitle}` : siteTitle;\n  const defaultDescription = 'House 31 - Your source for trending news, viral videos, and entertainment content.';\n  const defaultImage = '/og-image.jpg'; // Default OG image\n  \n  return (\n    <Helmet>\n      <title>{fullTitle}</title>\n      <meta name=\"description\" content={description || defaultDescription} />\n      \n      {/* Open Graph / Facebook */}\n      <meta property=\"og:type\" content={type} />\n      <meta property=\"og:url\" content={url || window.location.href} />\n      <meta property=\"og:title\" content={fullTitle} />\n      <meta property=\"og:description\" content={description || defaultDescription} />\n      <meta property=\"og:image\" content={image || defaultImage} />\n      \n      {/* Twitter */}\n      <meta property=\"twitter:card\" content=\"summary_large_image\" />\n      <meta property=\"twitter:url\" content={url || window.location.href} />\n      <meta property=\"twitter:title\" content={fullTitle} />\n      <meta property=\"twitter:description\" content={description || defaultDescription} />\n      <meta property=\"twitter:image\" content={image || defaultImage} />\n    </Helmet>\n  );\n}\n\nexport default SEO;\n```\n4. Add the SEO component to all pages with appropriate metadata\n5. Ensure all URLs are human-readable using slugs\n6. Add canonical URLs for duplicate content\n7. Create a sitemap.xml generator",
+        "testStrategy": "Test SEO implementation by inspecting the document head on different pages. Verify Open Graph tags are correctly set. Test with social media preview tools. Ensure all URLs are human-readable and consistent.",
+        "priority": "medium",
+        "dependencies": [
+          6,
+          7,
+          8,
+          9
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 14,
+        "title": "Implement Performance Optimizations",
+        "description": "Optimize performance with lazy loading for images/videos, code splitting, and other performance enhancements.",
+        "details": "1. Implement lazy loading for images using Intersection Observer API:\n```jsx\nimport { useEffect, useRef, useState } from 'react';\n\nfunction LazyImage({ src, alt, className }) {\n  const [isLoaded, setIsLoaded] = useState(false);\n  const imgRef = useRef();\n\n  useEffect(() => {\n    const observer = new IntersectionObserver((entries) => {\n      if (entries[0].isIntersecting) {\n        setIsLoaded(true);\n        observer.disconnect();\n      }\n    });\n    \n    if (imgRef.current) {\n      observer.observe(imgRef.current);\n    }\n    \n    return () => {\n      observer.disconnect();\n    };\n  }, []);\n\n  return (\n    <div ref={imgRef} className={className}>\n      {isLoaded ? (\n        <img \n          src={src} \n          alt={alt} \n          className=\"w-full h-full object-cover transition-opacity duration-300\"\n          loading=\"lazy\"\n        />\n      ) : (\n        <div className=\"w-full h-full bg-gray-200 animate-pulse\" />\n      )}\n    </div>\n  );\n}\n\nexport default LazyImage;\n```\n2. Implement code splitting with React.lazy and Suspense:\n```jsx\nimport { lazy, Suspense } from 'react';\n\nconst HomePage = lazy(() => import('./pages/HomePage'));\nconst CategoryPage = lazy(() => import('./pages/CategoryPage'));\nconst PostPage = lazy(() => import('./pages/PostPage'));\nconst VideoPage = lazy(() => import('./pages/VideoPage'));\nconst AdminPage = lazy(() => import('./pages/AdminPage'));\nconst SearchPage = lazy(() => import('./pages/SearchPage'));\n\nfunction App() {\n  return (\n    <BrowserRouter>\n      <Suspense fallback={<div>Loading...</div>}>\n        <Routes>\n          <Route path=\"/\" element={<Layout />}>\n            <Route index element={<HomePage />} />\n            <Route path=\"/news\" element={<CategoryPage category=\"news\" />} />\n            <Route path=\"/videos\" element={<VideoPage />} />\n            <Route path=\"/entertainment\" element={<CategoryPage category=\"entertainment\" />} />\n            <Route path=\"/post/:slug\" element={<PostPage />} />\n            <Route path=\"/search\" element={<SearchPage />} />\n            <Route path=\"/admin\" element={<AdminPage />} />\n          </Route>\n        </Routes>\n      </Suspense>\n    </BrowserRouter>\n  );\n}\n```\n3. Optimize images with responsive sizes and formats\n4. Implement memoization for expensive computations\n5. Add caching for API requests\n6. Configure Vite for optimal production builds",
+        "testStrategy": "Test performance optimizations using Lighthouse or similar tools. Verify lazy loading works for images and videos. Test code splitting by monitoring network requests. Measure and compare performance before and after optimizations.",
+        "priority": "medium",
+        "dependencies": [
+          6,
+          7,
+          8,
+          9
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 15,
+        "title": "Final Testing and Deployment",
+        "description": "Perform final testing, bug fixes, and deploy the application to production.",
+        "details": "1. Perform comprehensive testing:\n   - Cross-browser testing (Chrome, Firefox, Safari, Edge)\n   - Responsive design testing on different devices\n   - Functionality testing of all features\n   - Performance testing with Lighthouse\n   - Accessibility testing\n2. Fix any identified bugs and issues\n3. Set up deployment:\n   - Frontend: Deploy to Vercel or Netlify\n   - Backend: Deploy to Render or Railway\n   - Database: Set up MongoDB Atlas production cluster\n4. Configure environment variables for production\n5. Set up CI/CD pipeline (optional)\n6. Configure custom domain and SSL\n7. Implement monitoring and analytics\n8. Create documentation for future maintenance",
+        "testStrategy": "Perform end-to-end testing of the entire application. Verify all features work correctly in the production environment. Test deployment process to ensure it's smooth and repeatable. Monitor the application after deployment for any issues.",
+        "priority": "high",
+        "dependencies": [
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14
+        ],
+        "status": "pending",
+        "subtasks": []
+      }
+    ],
+    "metadata": {
+      "created": "2025-06-27T10:36:43.668Z",
+      "updated": "2025-06-27T10:37:50.348Z",
+      "description": "Tasks for master context"
+    }
+  }
+}

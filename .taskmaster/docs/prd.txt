@@ -1,0 +1,107 @@
+<context>
+# Overview
+House 31 is a modern, visually stunning entertainment and news hub inspired by LADbible. It delivers trending news, viral videos, and entertainment content across categories like News, Videos, and Entertainment. The site is public-facing with no user login/signup, and all content is managed by an admin via a simple interface or directly in the database.
+
+# Core Features
+- **Homepage:**
+  - Hero article (top story)
+  - Trending section (top 10, marked isTrending)
+  - Category blocks: News, Videos, Entertainment
+- **Category Pages:**
+  - Paginated lists for /news, /entertainment, /videos
+- **Post Detail Page:**
+  - /post/:slug route with title, cover image, content, embedded video, share buttons
+- **Trending Section:**
+  - Optional top carousel
+  - List of top 10 trending posts
+- **Video Page:**
+  - Grid layout, embedded videos (YouTube/mp4), thumbnail previews
+- **Search (Phase 2):**
+  - Keyword search through titles and tags
+- **Admin Flow:**
+  - Minimal /admin interface for posting content or manual DB entry
+- **SEO Optimization:**
+  - Meta titles/descriptions, Open Graph tags, human-readable URLs
+- **Performance:**
+  - Lazy loading images/videos, SPA (no SSR), fully responsive
+- **Styling:**
+  - Tailwind CSS, shadcn/ui for beautiful components, Iconify for icons, Framer Motion for optional animation
+
+# User Experience
+- **Personas:**
+  - General public seeking entertainment/news
+  - Admin managing content
+- **User Flows:**
+  - Browse homepage → view trending/news/videos/entertainment → read post → share
+  - Admin: Add/edit/delete posts via /admin or DB
+- **UI/UX:**
+  - Modern, clean, mobile-first design
+  - Consistent use of shadcn/ui and Iconify for a polished look
+  - Fast, smooth navigation (React Router DOM)
+</context>
+<PRD>
+# Technical Architecture
+- **Frontend:** React.js (Vite), Tailwind CSS, shadcn/ui, Iconify, React Router DOM, Framer Motion (optional), ReactPlayer
+- **Backend:** Node.js, Express.js, RESTful API
+- **Database:** MongoDB (Mongoose)
+- **Admin Panel:** Minimal Express route or manual DB entry
+
+## Content Model (Mongoose Schema)
+```js
+{
+  title: String,
+  slug: String,
+  category: String, // news | videos | entertainment | trending
+  thumbnailUrl: String,
+  videoUrl: String, // optional
+  content: String, // HTML or markdown
+  tags: [String],
+  createdAt: Date,
+  updatedAt: Date,
+  isTrending: Boolean
+}
+```
+
+## API Endpoints
+- GET /api/posts (all posts, optional pagination)
+- GET /api/posts/:slug (single post)
+- GET /api/posts?category=news (filter by category)
+- GET /api/trending (top 10 trending)
+- POST /api/posts (add post, admin only)
+- PUT /api/posts/:id (update post)
+- DELETE /api/posts/:id (delete post)
+
+# Development Roadmap
+- **Phase 1 (MVP):**
+  - React frontend setup
+  - Backend API (Node/Express)
+  - MongoDB schema/models
+  - Homepage, post, category pages
+  - Video page, trending section
+  - Admin content upload (simple form or DB)
+  - Styling with Tailwind, shadcn/ui, Iconify
+- **Phase 2:**
+  - Search functionality
+  - Final polish, animations, SEO
+  - Testing & deployment
+
+# Logical Dependency Chain
+- Set up backend API and DB schema first
+- Build frontend structure and routing
+- Implement homepage and category pages
+- Add post detail and video pages
+- Integrate admin content upload
+- Add trending and search features
+- Polish UI/UX, add SEO, test and deploy
+
+# Risks and Mitigations
+- **Technical:** ESM/CJS issues, deployment config—mitigate by using latest stable libraries and following best practices
+- **MVP Scope:** Focus on core features, admin can use DB directly if needed
+- **Performance:** Use lazy loading, optimize images/videos
+
+# Appendix
+- Use shadcn/ui for all major UI components
+- Use Iconify for icons
+- Example PRD template in `.taskmaster/templates/example_prd.txt`
+- Deployment: Vercel/Netlify (frontend), Render/Railway (backend), MongoDB Atlas (DB)
+</PRD>
