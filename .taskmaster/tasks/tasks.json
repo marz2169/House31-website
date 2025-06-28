@@ -3,273 +3,823 @@
     "tasks": [
       {
         "id": 1,
-        "title": "Setup Project Repository and Structure",
-        "description": "Initialize the project repository with Vite for React frontend and set up the Node.js/Express backend structure.",
-        "details": "1. Create a new project repository\n2. Initialize frontend with Vite: `npm create vite@latest frontend -- --template react`\n3. Set up backend directory: `mkdir backend`\n4. Initialize backend: `cd backend && npm init -y`\n5. Install backend dependencies: `npm install express mongoose cors dotenv`\n6. Install frontend dependencies: `cd ../frontend && npm install react-router-dom tailwindcss @tailwindcss/typography framer-motion iconify/react @radix-ui/react-icons react-player`\n7. Set up shadcn/ui: Follow installation guide at https://ui.shadcn.com/docs/installation\n8. Configure Tailwind CSS\n9. Create basic folder structure for both frontend and backend\n10. Set up ESLint and Prettier for code quality",
-        "testStrategy": "Verify all dependencies install correctly and the project structure is set up according to best practices. Run both frontend and backend to ensure they start without errors.",
+        "title": "Setup Project Repository and Initial Structure",
+        "description": "Initialize project repository with recommended folder structure for React (Vite), Node.js backend, and MongoDB integration.",
+        "details": "Create a monorepo or separate repos for frontend (React/Vite) and backend (Node/Express). Use npm/yarn workspaces if monorepo. Initialize with Vite (latest, e.g., 5.x) for frontend, Node.js (LTS, e.g., 20.x) for backend. Set up .gitignore, README, and basic CI/CD config for Vercel/Netlify (frontend) and Render/Railway (backend).",
+        "testStrategy": "Verify repository structure, package.json scripts, and CI/CD configs are correct. Test initial build and deployment scripts.",
         "priority": "high",
         "dependencies": [],
-        "status": "done",
+        "status": "pending",
         "subtasks": [
           {
             "id": 1,
-            "title": "Initialize Project Repository and Directories",
-            "description": "Create a new project repository and set up the initial directory structure for both frontend and backend.",
+            "title": "Decide Repository Structure and Tooling",
+            "description": "Determine whether to use a monorepo or separate repositories for frontend and backend. Select workspace tooling (e.g., npm/yarn/pnpm workspaces, Turborepo, Nx) based on project needs.",
             "dependencies": [],
-            "details": "Create a new repository, add a root folder, and within it, create 'frontend' and 'backend' directories to separate client and server code.",
-            "status": "done",
-            "testStrategy": "Verify that the repository exists with the correct folder structure: root, frontend, and backend directories."
+            "details": "Evaluate the pros and cons of monorepo vs. separate repos for React (Vite) frontend and Node.js backend. Choose workspace management tools to streamline development and dependency management.",
+            "status": "pending",
+            "testStrategy": "Confirm the chosen structure supports independent development and shared dependencies. Validate workspace commands (e.g., install, build) work as intended."
           },
           {
             "id": 2,
-            "title": "Set Up React Frontend with Vite",
-            "description": "Initialize the frontend using Vite with the React template and install required dependencies.",
+            "title": "Initialize Frontend with Vite (React)",
+            "description": "Set up the frontend application using Vite (latest version) with React, including initial folder structure and configuration.",
             "dependencies": [
               1
             ],
-            "details": "Run 'npm create vite@latest frontend -- --template react' inside the repository, then install dependencies: react-router-dom, tailwindcss, @tailwindcss/typography, framer-motion, iconify/react, @radix-ui/react-icons, react-player. Follow the shadcn/ui installation guide.",
-            "status": "done",
-            "testStrategy": "Start the Vite dev server and confirm the React app runs. Check that all dependencies are listed in package.json."
+            "details": "Use Vite CLI or workspace tooling to scaffold the React frontend. Configure the project with recommended folder structure, ESLint, Prettier, and Vitest if applicable.",
+            "status": "pending",
+            "testStrategy": "Run the development server and verify the default React app loads. Check linting and formatting tools are operational."
           },
           {
             "id": 3,
-            "title": "Configure Tailwind CSS and shadcn/ui in Frontend",
-            "description": "Set up Tailwind CSS and integrate shadcn/ui in the React frontend.",
-            "dependencies": [
-              2
-            ],
-            "details": "Configure Tailwind CSS according to its documentation, ensuring it works with Vite and React. Complete shadcn/ui installation and verify integration.",
-            "status": "done",
-            "testStrategy": "Add a sample component using Tailwind and shadcn/ui styles, then confirm styles render correctly in the browser."
-          },
-          {
-            "id": 4,
-            "title": "Set Up Node.js/Express Backend",
-            "description": "Initialize the backend with npm, install dependencies, and create the basic Express server structure.",
+            "title": "Initialize Backend with Node.js (Express)",
+            "description": "Set up the backend application using Node.js (LTS) and Express, including initial folder structure and configuration.",
             "dependencies": [
               1
             ],
-            "details": "Inside the backend directory, run 'npm init -y' and install express, mongoose, cors, dotenv. Create an entry point (e.g., index.js) with a basic Express server setup.",
-            "status": "done",
-            "testStrategy": "Start the backend server and verify it responds to a test route (e.g., GET /api/health returns a status message)."
+            "details": "Scaffold the backend with Express, set up recommended folders (routes, controllers, models), and configure environment variables. Prepare for MongoDB integration.",
+            "status": "pending",
+            "testStrategy": "Start the backend server and verify a basic route responds. Ensure folder structure matches best practices."
+          },
+          {
+            "id": 4,
+            "title": "Integrate MongoDB with Backend",
+            "description": "Configure MongoDB connection in the backend using a library such as Mongoose, and set up initial models.",
+            "dependencies": [
+              3
+            ],
+            "details": "Install MongoDB client (e.g., Mongoose), add connection logic, and create a sample model/schema. Ensure environment variables for DB connection are set up.",
+            "status": "pending",
+            "testStrategy": "Connect to a local or cloud MongoDB instance and verify successful connection. Test basic CRUD operations with the sample model."
           },
           {
             "id": 5,
-            "title": "Establish Project-wide Code Quality Tools",
-            "description": "Set up ESLint and Prettier for both frontend and backend to enforce code quality and consistency.",
+            "title": "Set Up Project-Level Files and CI/CD Configuration",
+            "description": "Create .gitignore, README, and configure basic CI/CD for frontend (Vercel/Netlify) and backend (Render/Railway).",
             "dependencies": [
               2,
-              4
+              3
             ],
-            "details": "Install and configure ESLint and Prettier in both frontend and backend directories. Add configuration files and ensure they are compatible with React and Node.js codebases.",
-            "status": "done",
-            "testStrategy": "Run lint and format scripts in both frontend and backend; confirm that code is checked and auto-formatted without errors."
+            "details": "Add .gitignore for both frontend and backend, write an initial README with setup instructions, and configure CI/CD pipelines for deployment targets. Ensure environment variables are handled securely.",
+            "status": "pending",
+            "testStrategy": "Push to repository and verify CI/CD pipelines trigger and deploy to the correct environments. Confirm .gitignore excludes appropriate files and README is clear."
           }
         ]
       },
       {
         "id": 2,
-        "title": "Setup MongoDB and Mongoose Schema",
-        "description": "Set up MongoDB connection and create the Mongoose schema for content posts as specified in the PRD.",
-        "details": "1. Create MongoDB Atlas account if not already available\n2. Set up a new cluster and database\n3. Create a `.env` file in the backend directory with MongoDB connection string\n4. Create `models/Post.js` with the following schema:\n```js\nconst mongoose = require('mongoose');\nconst slugify = require('slugify');\n\nconst PostSchema = new mongoose.Schema({\n  title: { type: String, required: true },\n  slug: { type: String, unique: true },\n  category: { type: String, enum: ['news', 'videos', 'entertainment'], required: true },\n  thumbnailUrl: { type: String, required: true },\n  videoUrl: { type: String },\n  content: { type: String, required: true },\n  tags: [String],\n  createdAt: { type: Date, default: Date.now },\n  updatedAt: { type: Date, default: Date.now },\n  isTrending: { type: Boolean, default: false }\n});\n\n// Pre-save hook to generate slug from title\nPostSchema.pre('save', function(next) {\n  if (!this.slug) {\n    this.slug = slugify(this.title, { lower: true, strict: true });\n  }\n  this.updatedAt = Date.now();\n  next();\n});\n\nmodule.exports = mongoose.model('Post', PostSchema);\n```\n5. Create database connection utility in `config/db.js`\n6. Add connection logic to server startup",
-        "testStrategy": "Test MongoDB connection by connecting to the database and verifying no errors. Create a test post document to ensure the schema works correctly, especially the slug generation and required fields validation.",
+        "title": "Configure MongoDB Atlas and Schema",
+        "description": "Set up MongoDB Atlas database and define Mongoose schema for posts.",
+        "details": "Create MongoDB Atlas cluster. Define Mongoose schema as per PRD. Use Mongoose (latest, e.g., 8.x) for ODM. Add indexes for slug, category, and isTrending. Set up connection pooling and environment variables for DB credentials.",
+        "testStrategy": "Test database connection and schema validation. Insert/retrieve test posts via Mongoose.",
         "priority": "high",
         "dependencies": [
           1
         ],
         "status": "pending",
-        "subtasks": []
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Create MongoDB Atlas Account and Cluster",
+            "description": "Sign up for a MongoDB Atlas account and create a new cluster suitable for the project requirements.",
+            "dependencies": [],
+            "details": "Register for a MongoDB Atlas account if not already available. Use the Atlas UI to create a new cluster, selecting the appropriate cloud provider, region, and cluster tier as per project needs.",
+            "status": "pending",
+            "testStrategy": "Verify that the cluster is provisioned and accessible from the Atlas dashboard."
+          },
+          {
+            "id": 2,
+            "title": "Configure Cluster Security and Access",
+            "description": "Set up database user credentials and network access rules for the Atlas cluster.",
+            "dependencies": [
+              1
+            ],
+            "details": "Create a database user with a strong password and assign appropriate roles. Configure IP whitelist to allow connections from development and deployment environments.",
+            "status": "pending",
+            "testStrategy": "Test connection to the cluster using the created credentials and verify access is restricted to allowed IPs."
+          },
+          {
+            "id": 3,
+            "title": "Set Up Environment Variables for Database Credentials",
+            "description": "Store MongoDB connection URI and credentials securely using environment variables.",
+            "dependencies": [
+              2
+            ],
+            "details": "Add the MongoDB connection string and credentials to a .env file or secret manager as per project standards. Ensure sensitive information is not hardcoded.",
+            "status": "pending",
+            "testStrategy": "Check that the application can read the environment variables and connect to the database without exposing credentials in code."
+          },
+          {
+            "id": 4,
+            "title": "Define Mongoose Schema for Posts",
+            "description": "Create a Mongoose schema for posts based on the Product Requirements Document (PRD), including required fields and data types.",
+            "dependencies": [
+              3
+            ],
+            "details": "Use the latest version of Mongoose (e.g., 8.x) to define the schema. Ensure all fields specified in the PRD are included with correct types and validation rules.",
+            "status": "pending",
+            "testStrategy": "Write unit tests to validate schema enforcement and required field constraints."
+          },
+          {
+            "id": 5,
+            "title": "Add Indexes and Configure Connection Pooling",
+            "description": "Enhance the Mongoose schema with indexes for slug, category, and isTrending fields, and configure connection pooling.",
+            "dependencies": [
+              4
+            ],
+            "details": "Use Mongoose schema options to add indexes for efficient querying. Adjust Mongoose connection settings to enable connection pooling for performance optimization.",
+            "status": "pending",
+            "testStrategy": "Verify indexes exist in the database and test query performance. Confirm connection pooling is active by monitoring concurrent connections."
+          }
+        ]
       },
       {
         "id": 3,
-        "title": "Implement Backend API Routes",
-        "description": "Create RESTful API endpoints for posts as specified in the PRD, including GET, POST, PUT, and DELETE operations.",
-        "details": "1. Create `routes/posts.js` to handle all post-related routes\n2. Implement the following endpoints:\n   - GET /api/posts (with pagination)\n   - GET /api/posts/:slug (single post)\n   - GET /api/posts?category=news (filter by category)\n   - GET /api/trending (top 10 trending)\n   - POST /api/posts (add post, admin only)\n   - PUT /api/posts/:id (update post)\n   - DELETE /api/posts/:id (delete post)\n3. Create controllers in `controllers/posts.js` with the following functions:\n   - getPosts (with pagination and filtering)\n   - getPostBySlug\n   - getTrendingPosts\n   - createPost\n   - updatePost\n   - deletePost\n4. Implement basic error handling and validation\n5. Set up CORS to allow frontend requests\n6. Create a simple middleware for admin routes (can be basic for MVP)",
-        "testStrategy": "Use Postman or similar tool to test all API endpoints. Verify each endpoint returns the correct data format and status codes. Test pagination, filtering, and error handling. Create test data to verify CRUD operations work correctly.",
+        "title": "Implement Backend RESTful API",
+        "description": "Build Node.js/Express RESTful API endpoints for posts and admin operations.",
+        "details": "Use Express.js (latest, e.g., 4.x) with RESTful routing. Implement GET /api/posts, GET /api/posts/:slug, GET /api/posts?category=news, GET /api/trending, POST /api/posts, PUT /api/posts/:id, DELETE /api/posts/:id. Add JWT or basic auth for admin endpoints if needed. Use express-validator for input sanitization.",
+        "testStrategy": "Test all endpoints with Postman/curl. Validate CRUD operations, filtering, and error handling.",
         "priority": "high",
         "dependencies": [
           2
         ],
         "status": "pending",
-        "subtasks": []
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Set Up Node.js and Express Project",
+            "description": "Initialize a new Node.js project and install Express.js as the core framework for building the RESTful API.",
+            "dependencies": [],
+            "details": "Create a new project directory, run npm init to generate package.json, and install Express using npm. Set up the basic server entry point (e.g., app.js) and configure Express to parse JSON requests.",
+            "status": "pending",
+            "testStrategy": "Verify that the server starts successfully and responds to a basic GET request at the root endpoint."
+          },
+          {
+            "id": 2,
+            "title": "Design and Implement RESTful API Endpoints for Posts",
+            "description": "Define and implement the required RESTful routes for posts, including listing, retrieving by slug, filtering by category, trending posts, creating, updating, and deleting posts.",
+            "dependencies": [
+              1
+            ],
+            "details": "Implement GET /api/posts, GET /api/posts/:slug, GET /api/posts?category=news, GET /api/trending, POST /api/posts, PUT /api/posts/:id, and DELETE /api/posts/:id using Express routing.",
+            "status": "pending",
+            "testStrategy": "Use Postman or curl to test each endpoint for correct HTTP responses and expected data."
+          },
+          {
+            "id": 3,
+            "title": "Integrate Input Validation and Sanitization",
+            "description": "Apply express-validator middleware to sanitize and validate incoming request data for all endpoints that accept input.",
+            "dependencies": [
+              2
+            ],
+            "details": "Install express-validator and add validation logic to POST and PUT endpoints to ensure data integrity and prevent malicious input.",
+            "status": "pending",
+            "testStrategy": "Send invalid and malicious payloads to endpoints and verify that validation errors are returned appropriately."
+          },
+          {
+            "id": 4,
+            "title": "Implement Authentication for Admin Operations",
+            "description": "Add JWT or basic authentication to secure admin endpoints such as creating, updating, and deleting posts.",
+            "dependencies": [
+              3
+            ],
+            "details": "Integrate authentication middleware to protect POST, PUT, and DELETE routes, ensuring only authorized users can perform these actions.",
+            "status": "pending",
+            "testStrategy": "Attempt to access admin endpoints without and with valid credentials to confirm proper access control."
+          },
+          {
+            "id": 5,
+            "title": "Error Handling and Response Standardization",
+            "description": "Implement centralized error handling and ensure all API responses follow a consistent structure.",
+            "dependencies": [
+              4
+            ],
+            "details": "Add middleware to catch and handle errors, returning standardized JSON error responses. Ensure all endpoints return consistent success and error formats.",
+            "status": "pending",
+            "testStrategy": "Trigger various error scenarios (e.g., invalid input, unauthorized access, not found) and verify that responses are uniform and informative."
+          }
+        ]
       },
       {
         "id": 4,
-        "title": "Setup Frontend Routing and Layout",
-        "description": "Set up React Router DOM for frontend navigation and create the basic layout components.",
-        "details": "1. Create a basic layout structure with components:\n   - `components/layout/Header.jsx`\n   - `components/layout/Footer.jsx`\n   - `components/layout/Layout.jsx` (wrapper component)\n2. Set up React Router in `App.jsx`:\n```jsx\nimport { BrowserRouter, Routes, Route } from 'react-router-dom';\nimport Layout from './components/layout/Layout';\nimport HomePage from './pages/HomePage';\nimport CategoryPage from './pages/CategoryPage';\nimport PostPage from './pages/PostPage';\nimport VideoPage from './pages/VideoPage';\nimport AdminPage from './pages/AdminPage';\n\nfunction App() {\n  return (\n    <BrowserRouter>\n      <Routes>\n        <Route path=\"/\" element={<Layout />}>\n          <Route index element={<HomePage />} />\n          <Route path=\"/news\" element={<CategoryPage category=\"news\" />} />\n          <Route path=\"/videos\" element={<VideoPage />} />\n          <Route path=\"/entertainment\" element={<CategoryPage category=\"entertainment\" />} />\n          <Route path=\"/post/:slug\" element={<PostPage />} />\n          <Route path=\"/admin\" element={<AdminPage />} />\n        </Route>\n      </Routes>\n    </BrowserRouter>\n  );\n}\n\nexport default App;\n```\n3. Create placeholder page components for all routes\n4. Implement responsive navigation with shadcn/ui components\n5. Add Iconify icons for navigation items",
-        "testStrategy": "Test all routes to ensure they render the correct components. Verify navigation works between pages. Test responsive behavior on different screen sizes. Ensure layout components (header, footer) appear consistently across all pages.",
+        "title": "Setup React Frontend with Vite and Routing",
+        "description": "Initialize React frontend with Vite, React Router DOM, and basic layout.",
+        "details": "Use Vite (latest, e.g., 5.x) with React (latest, e.g., 18.x). Install React Router DOM (latest, e.g., 6.x) for routing. Set up basic layout with header, footer, and main content area. Configure environment variables for API base URL.",
+        "testStrategy": "Verify app builds and runs. Test basic routing between pages.",
         "priority": "high",
         "dependencies": [
           1
         ],
         "status": "pending",
-        "subtasks": []
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Initialize Vite React Project",
+            "description": "Create a new React project using Vite with the latest React template.",
+            "dependencies": [],
+            "details": "Run the Vite scaffolding command to set up a new project directory with React (e.g., `npm create vite@latest my-app -- --template react`). Ensure the latest versions of Vite and React are used.",
+            "status": "pending",
+            "testStrategy": "Verify that the project directory is created and the default Vite React app runs successfully with `npm run dev` or `yarn dev`."
+          },
+          {
+            "id": 2,
+            "title": "Install React Router DOM",
+            "description": "Add React Router DOM to the project for client-side routing.",
+            "dependencies": [
+              1
+            ],
+            "details": "Install the latest version of React Router DOM using the package manager (e.g., `npm install react-router-dom@latest`).",
+            "status": "pending",
+            "testStrategy": "Check that `react-router-dom` appears in `package.json` dependencies and can be imported in the project without errors."
+          },
+          {
+            "id": 3,
+            "title": "Configure Basic Routing",
+            "description": "Set up basic routing structure using React Router DOM.",
+            "dependencies": [
+              2
+            ],
+            "details": "Create a basic routing setup with at least two routes (e.g., Home and About) using `<BrowserRouter>`, `<Routes>`, and `<Route>` components.",
+            "status": "pending",
+            "testStrategy": "Navigate between defined routes in the browser and confirm the correct components render for each path."
+          },
+          {
+            "id": 4,
+            "title": "Implement Basic Layout Components",
+            "description": "Create and integrate header, footer, and main content area components.",
+            "dependencies": [
+              3
+            ],
+            "details": "Develop reusable Header, Footer, and Main components. Integrate them into the main App layout so they persist across route changes.",
+            "status": "pending",
+            "testStrategy": "Visually confirm that the header and footer are always visible, and the main content area updates according to the current route."
+          },
+          {
+            "id": 5,
+            "title": "Configure Environment Variables for API Base URL",
+            "description": "Set up environment variables in Vite for managing the API base URL.",
+            "dependencies": [
+              1
+            ],
+            "details": "Create a `.env` file in the project root and define a variable (e.g., `VITE_API_BASE_URL`). Access this variable in the React code using `import.meta.env.VITE_API_BASE_URL`.",
+            "status": "pending",
+            "testStrategy": "Log or display the API base URL in the app to confirm it is correctly loaded from the environment variable."
+          }
+        ]
       },
       {
         "id": 5,
-        "title": "Create API Service Layer",
-        "description": "Implement a service layer to handle API requests from the frontend to the backend.",
-        "details": "1. Create `services/api.js` with functions to interact with the backend API\n2. Implement the following functions:\n```js\nconst API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';\n\nexport const fetchPosts = async (page = 1, limit = 10, category = null) => {\n  let url = `${API_URL}/posts?page=${page}&limit=${limit}`;\n  if (category) url += `&category=${category}`;\n  const response = await fetch(url);\n  if (!response.ok) throw new Error('Failed to fetch posts');\n  return response.json();\n};\n\nexport const fetchPostBySlug = async (slug) => {\n  const response = await fetch(`${API_URL}/posts/${slug}`);\n  if (!response.ok) throw new Error('Failed to fetch post');\n  return response.json();\n};\n\nexport const fetchTrendingPosts = async () => {\n  const response = await fetch(`${API_URL}/trending`);\n  if (!response.ok) throw new Error('Failed to fetch trending posts');\n  return response.json();\n};\n\nexport const createPost = async (postData) => {\n  const response = await fetch(`${API_URL}/posts`, {\n    method: 'POST',\n    headers: { 'Content-Type': 'application/json' },\n    body: JSON.stringify(postData),\n  });\n  if (!response.ok) throw new Error('Failed to create post');\n  return response.json();\n};\n\nexport const updatePost = async (id, postData) => {\n  const response = await fetch(`${API_URL}/posts/${id}`, {\n    method: 'PUT',\n    headers: { 'Content-Type': 'application/json' },\n    body: JSON.stringify(postData),\n  });\n  if (!response.ok) throw new Error('Failed to update post');\n  return response.json();\n};\n\nexport const deletePost = async (id) => {\n  const response = await fetch(`${API_URL}/posts/${id}`, {\n    method: 'DELETE',\n  });\n  if (!response.ok) throw new Error('Failed to delete post');\n  return response.json();\n};\n```\n3. Create custom hooks for data fetching in `hooks/useApi.js`\n4. Implement error handling and loading states",
-        "testStrategy": "Test each API function with mock data to ensure they correctly format requests and handle responses. Verify error handling works as expected. Test with the actual backend once it's available.",
-        "priority": "high",
+        "title": "Implement Homepage Layout and Hero Section",
+        "description": "Build homepage with hero article, trending section, and category blocks.",
+        "details": "Use Tailwind CSS (latest, e.g., 3.x) and shadcn/ui (latest) for components. Fetch hero article (top story) and trending posts from API. Display category blocks (News, Videos, Entertainment) with links. Use Iconify for icons. Ensure mobile-first, responsive design.",
+        "testStrategy": "Test homepage renders correctly on different devices. Verify data fetching and layout responsiveness.",
+        "priority": "medium",
         "dependencies": [
           3,
           4
         ],
         "status": "pending",
-        "subtasks": []
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Set Up Project with Tailwind CSS, shadcn/ui, and Iconify",
+            "description": "Initialize the project and configure Tailwind CSS (latest 3.x), shadcn/ui, and Iconify for icon usage.",
+            "dependencies": [],
+            "details": "Install and configure Tailwind CSS, shadcn/ui, and Iconify. Ensure all dependencies are up to date and ready for component development.",
+            "status": "pending",
+            "testStrategy": "Verify that Tailwind classes, shadcn/ui components, and Iconify icons render correctly in a test component."
+          },
+          {
+            "id": 2,
+            "title": "Fetch Hero Article and Trending Posts from API",
+            "description": "Implement API calls to retrieve the hero article (top story) and trending posts for the homepage.",
+            "dependencies": [
+              1
+            ],
+            "details": "Set up API integration using fetch or a preferred HTTP client. Structure the data for use in the hero and trending sections.",
+            "status": "pending",
+            "testStrategy": "Mock API responses and confirm data is correctly fetched and available for rendering."
+          },
+          {
+            "id": 3,
+            "title": "Design and Implement Responsive Hero Section",
+            "description": "Build the hero section using Tailwind CSS and shadcn/ui, displaying the fetched hero article with a mobile-first, responsive layout.",
+            "dependencies": [
+              2
+            ],
+            "details": "Use Tailwind CSS hero section patterns for layout. Ensure the hero article is visually prominent and adapts to different screen sizes.",
+            "status": "pending",
+            "testStrategy": "Test the hero section on multiple devices and screen sizes to confirm responsiveness and correct data display."
+          },
+          {
+            "id": 4,
+            "title": "Create Trending Section and Category Blocks",
+            "description": "Develop the trending posts section and category blocks (News, Videos, Entertainment) with links and icons.",
+            "dependencies": [
+              2
+            ],
+            "details": "Use shadcn/ui and Tailwind CSS to style the trending section and category blocks. Integrate Iconify icons for each category.",
+            "status": "pending",
+            "testStrategy": "Check that trending posts and category blocks render with correct data, links, and icons on all devices."
+          },
+          {
+            "id": 5,
+            "title": "Ensure Mobile-First and Responsive Design Across Homepage",
+            "description": "Review and refine the homepage layout to guarantee mobile-first, fully responsive design for all sections.",
+            "dependencies": [
+              3,
+              4
+            ],
+            "details": "Audit all homepage components for responsiveness, accessibility, and visual consistency. Adjust Tailwind classes as needed.",
+            "status": "pending",
+            "testStrategy": "Perform cross-device and cross-browser testing to validate layout, responsiveness, and usability."
+          }
+        ]
       },
       {
         "id": 6,
-        "title": "Implement Homepage",
-        "description": "Create the homepage with hero article, trending section, and category blocks for News, Videos, and Entertainment.",
-        "details": "1. Create components for homepage sections:\n   - `components/home/HeroArticle.jsx`\n   - `components/home/TrendingSection.jsx`\n   - `components/home/CategoryBlock.jsx`\n2. Implement the HomePage component to fetch and display data:\n```jsx\nimport { useState, useEffect } from 'react';\nimport { fetchPosts, fetchTrendingPosts } from '../services/api';\nimport HeroArticle from '../components/home/HeroArticle';\nimport TrendingSection from '../components/home/TrendingSection';\nimport CategoryBlock from '../components/home/CategoryBlock';\n\nfunction HomePage() {\n  const [heroPost, setHeroPost] = useState(null);\n  const [trendingPosts, setTrendingPosts] = useState([]);\n  const [newsPosts, setNewsPosts] = useState([]);\n  const [videoPosts, setVideoPosts] = useState([]);\n  const [entertainmentPosts, setEntertainmentPosts] = useState([]);\n  const [loading, setLoading] = useState(true);\n  const [error, setError] = useState(null);\n\n  useEffect(() => {\n    const loadData = async () => {\n      try {\n        setLoading(true);\n        // Fetch trending posts\n        const trending = await fetchTrendingPosts();\n        setTrendingPosts(trending);\n        \n        // Set hero post as first trending post\n        if (trending.length > 0) setHeroPost(trending[0]);\n        \n        // Fetch category posts\n        const news = await fetchPosts(1, 6, 'news');\n        const videos = await fetchPosts(1, 6, 'videos');\n        const entertainment = await fetchPosts(1, 6, 'entertainment');\n        \n        setNewsPosts(news.posts);\n        setVideoPosts(videos.posts);\n        setEntertainmentPosts(entertainment.posts);\n      } catch (err) {\n        setError(err.message);\n      } finally {\n        setLoading(false);\n      }\n    };\n    \n    loadData();\n  }, []);\n\n  if (loading) return <div>Loading...</div>;\n  if (error) return <div>Error: {error}</div>;\n\n  return (\n    <div className=\"container mx-auto px-4 py-8\">\n      {heroPost && <HeroArticle post={heroPost} />}\n      \n      <TrendingSection posts={trendingPosts} />\n      \n      <div className=\"grid grid-cols-1 md:grid-cols-3 gap-8 mt-12\">\n        <CategoryBlock title=\"News\" posts={newsPosts} category=\"news\" />\n        <CategoryBlock title=\"Videos\" posts={videoPosts} category=\"videos\" />\n        <CategoryBlock title=\"Entertainment\" posts={entertainmentPosts} category=\"entertainment\" />\n      </div>\n    </div>\n  );\n}\n\nexport default HomePage;\n```\n3. Style components using Tailwind CSS and shadcn/ui\n4. Implement responsive design for all screen sizes\n5. Add lazy loading for images using Intersection Observer API",
-        "testStrategy": "Test the homepage with mock data to ensure all sections render correctly. Verify responsive behavior on different screen sizes. Test with actual API data once available. Verify lazy loading works for images.",
-        "priority": "high",
+        "title": "Build Category and Post Detail Pages",
+        "description": "Implement paginated category pages and post detail page with embedded video and share buttons.",
+        "details": "Create /news, /entertainment, /videos routes with pagination. Fetch posts by category from API. Build /post/:slug route with title, cover image, content, embedded video (ReactPlayer, latest), and share buttons. Use lazy loading for images/videos.",
+        "testStrategy": "Test pagination, post detail rendering, and video embedding. Check share button functionality.",
+        "priority": "medium",
         "dependencies": [
-          5
+          3,
+          4
         ],
         "status": "pending",
-        "subtasks": []
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Set Up Category Routes and Fetch Posts by Category",
+            "description": "Create React routes for /news, /entertainment, and /videos. Implement logic to fetch posts by category from the API.",
+            "dependencies": [],
+            "details": "Define category routes in the router configuration. For each route, fetch posts from the API based on the selected category and store them in state.",
+            "status": "pending",
+            "testStrategy": "Navigate to each category route and verify that posts are fetched and displayed according to the selected category."
+          },
+          {
+            "id": 2,
+            "title": "Implement Pagination for Category Pages",
+            "description": "Add pagination controls to category pages to display posts in a paginated manner.",
+            "dependencies": [
+              1
+            ],
+            "details": "Create a Pagination component that calculates the number of pages based on the total posts and posts per page. Implement handlers to update the current page and fetch/display the correct subset of posts.",
+            "status": "pending",
+            "testStrategy": "Test pagination controls by navigating between pages and confirming that the correct posts are shown for each page."
+          },
+          {
+            "id": 3,
+            "title": "Build Post Detail Route and Page",
+            "description": "Create the /post/:slug route and implement the post detail page layout.",
+            "dependencies": [
+              1
+            ],
+            "details": "Set up dynamic routing for individual posts using the slug parameter. Fetch post details from the API and display the title, cover image, and content.",
+            "status": "pending",
+            "testStrategy": "Access various /post/:slug URLs and verify that the correct post details are rendered."
+          },
+          {
+            "id": 4,
+            "title": "Integrate Embedded Video and Share Buttons in Post Detail Page",
+            "description": "Embed video using ReactPlayer and add social share buttons to the post detail page.",
+            "dependencies": [
+              3
+            ],
+            "details": "Use ReactPlayer to display the latest video in the post detail page. Add share buttons for major social platforms, ensuring they use the post's URL and metadata.",
+            "status": "pending",
+            "testStrategy": "Check that the video loads and plays correctly, and that share buttons open the appropriate sharing dialogs with correct information."
+          },
+          {
+            "id": 5,
+            "title": "Implement Lazy Loading for Images and Videos",
+            "description": "Optimize performance by adding lazy loading for images and embedded videos on both category and post detail pages.",
+            "dependencies": [
+              2,
+              4
+            ],
+            "details": "Use React's lazy loading techniques or third-party libraries to defer loading of images and videos until they are in the viewport.",
+            "status": "pending",
+            "testStrategy": "Use browser dev tools to confirm that images and videos are only loaded when scrolled into view, and verify no broken media loads."
+          }
+        ]
       },
       {
         "id": 7,
-        "title": "Implement Category Pages",
-        "description": "Create paginated category pages for News, Videos, and Entertainment sections.",
-        "details": "1. Create a reusable CategoryPage component that works for both News and Entertainment:\n```jsx\nimport { useState, useEffect } from 'react';\nimport { useParams, useSearchParams } from 'react-router-dom';\nimport { fetchPosts } from '../services/api';\nimport PostCard from '../components/shared/PostCard';\nimport Pagination from '../components/shared/Pagination';\n\nfunction CategoryPage({ category: propCategory }) {\n  const { category: paramCategory } = useParams();\n  const [searchParams, setSearchParams] = useSearchParams();\n  const category = propCategory || paramCategory;\n  const page = parseInt(searchParams.get('page') || '1');\n  \n  const [posts, setPosts] = useState([]);\n  const [totalPages, setTotalPages] = useState(1);\n  const [loading, setLoading] = useState(true);\n  const [error, setError] = useState(null);\n\n  useEffect(() => {\n    const loadPosts = async () => {\n      try {\n        setLoading(true);\n        const data = await fetchPosts(page, 12, category);\n        setPosts(data.posts);\n        setTotalPages(data.totalPages);\n      } catch (err) {\n        setError(err.message);\n      } finally {\n        setLoading(false);\n      }\n    };\n    \n    loadPosts();\n  }, [category, page]);\n\n  const handlePageChange = (newPage) => {\n    setSearchParams({ page: newPage.toString() });\n  };\n\n  if (loading) return <div>Loading...</div>;\n  if (error) return <div>Error: {error}</div>;\n\n  return (\n    <div className=\"container mx-auto px-4 py-8\">\n      <h1 className=\"text-3xl font-bold mb-8 capitalize\">{category}</h1>\n      \n      <div className=\"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6\">\n        {posts.map(post => (\n          <PostCard key={post._id} post={post} />\n        ))}\n      </div>\n      \n      <Pagination \n        currentPage={page} \n        totalPages={totalPages} \n        onPageChange={handlePageChange} \n      />\n    </div>\n  );\n}\n\nexport default CategoryPage;\n```\n2. Create a separate VideoPage component with grid layout for videos\n3. Implement a reusable PostCard component for displaying post previews\n4. Create a Pagination component for navigating between pages\n5. Style all components with Tailwind CSS and shadcn/ui",
-        "testStrategy": "Test category pages with different categories to ensure they display the correct content. Test pagination to verify it works correctly. Verify responsive behavior on different screen sizes. Test with actual API data once available.",
+        "title": "Develop Video Page with Grid Layout",
+        "description": "Create video page with grid layout, embedded videos, and thumbnail previews.",
+        "details": "Build /videos route with grid layout using Tailwind CSS. Fetch and display video posts. Use ReactPlayer for embedded videos (YouTube/mp4). Add thumbnail previews. Implement lazy loading for performance.",
+        "testStrategy": "Test video grid layout, embedding, and lazy loading. Verify performance on mobile.",
         "priority": "medium",
         "dependencies": [
-          5
+          3,
+          4
         ],
         "status": "pending",
-        "subtasks": []
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Set Up Grid Layout with Tailwind CSS",
+            "description": "Create a grid layout for the video page using Tailwind CSS classes.",
+            "dependencies": [],
+            "details": "Use the grid class and utilities like grid-cols-X and gap-X to define the layout.",
+            "status": "pending",
+            "testStrategy": "Verify layout responsiveness and grid structure"
+          },
+          {
+            "id": 2,
+            "title": "Implement Video Post Fetching",
+            "description": "Fetch video posts to display on the page.",
+            "dependencies": [],
+            "details": "Use API calls or database queries to retrieve video data.",
+            "status": "pending",
+            "testStrategy": "Check data retrieval and handling errors"
+          },
+          {
+            "id": 3,
+            "title": "Embed Videos Using ReactPlayer",
+            "description": "Embed YouTube and mp4 videos using ReactPlayer.",
+            "dependencies": [
+              2
+            ],
+            "details": "Integrate ReactPlayer into the grid layout for video embedding.",
+            "status": "pending",
+            "testStrategy": "Test video playback and compatibility"
+          },
+          {
+            "id": 4,
+            "title": "Add Thumbnail Previews",
+            "description": "Display thumbnail previews for each video.",
+            "dependencies": [
+              2
+            ],
+            "details": "Use video metadata to generate or fetch thumbnails.",
+            "status": "pending",
+            "testStrategy": "Verify thumbnail display and loading"
+          },
+          {
+            "id": 5,
+            "title": "Implement Lazy Loading",
+            "description": "Optimize performance by implementing lazy loading for videos and thumbnails.",
+            "dependencies": [
+              3,
+              4
+            ],
+            "details": "Use libraries or custom code to load content only when needed.",
+            "status": "pending",
+            "testStrategy": "Measure performance improvements and loading times"
+          }
+        ]
       },
       {
         "id": 8,
-        "title": "Implement Post Detail Page",
-        "description": "Create the post detail page that displays a single post with title, cover image, content, embedded video (if applicable), and share buttons.",
-        "details": "1. Create the PostPage component:\n```jsx\nimport { useState, useEffect } from 'react';\nimport { useParams } from 'react-router-dom';\nimport { fetchPostBySlug } from '../services/api';\nimport ReactPlayer from 'react-player';\nimport ShareButtons from '../components/shared/ShareButtons';\n\nfunction PostPage() {\n  const { slug } = useParams();\n  const [post, setPost] = useState(null);\n  const [loading, setLoading] = useState(true);\n  const [error, setError] = useState(null);\n\n  useEffect(() => {\n    const loadPost = async () => {\n      try {\n        setLoading(true);\n        const data = await fetchPostBySlug(slug);\n        setPost(data);\n      } catch (err) {\n        setError(err.message);\n      } finally {\n        setLoading(false);\n      }\n    };\n    \n    loadPost();\n  }, [slug]);\n\n  if (loading) return <div>Loading...</div>;\n  if (error) return <div>Error: {error}</div>;\n  if (!post) return <div>Post not found</div>;\n\n  return (\n    <div className=\"container mx-auto px-4 py-8 max-w-4xl\">\n      <h1 className=\"text-4xl font-bold mb-4\">{post.title}</h1>\n      \n      <div className=\"mb-6\">\n        <img \n          src={post.thumbnailUrl} \n          alt={post.title} \n          className=\"w-full h-auto rounded-lg\"\n        />\n      </div>\n      \n      {post.videoUrl && (\n        <div className=\"mb-6\">\n          <ReactPlayer \n            url={post.videoUrl} \n            width=\"100%\"\n            height=\"480px\"\n            controls\n          />\n        </div>\n      )}\n      \n      <div className=\"mb-8\">\n        <ShareButtons url={window.location.href} title={post.title} />\n      </div>\n      \n      <div \n        className=\"prose max-w-none\"\n        dangerouslySetInnerHTML={{ __html: post.content }}\n      />\n      \n      <div className=\"mt-8\">\n        <div className=\"flex flex-wrap gap-2\">\n          {post.tags.map(tag => (\n            <span \n              key={tag} \n              className=\"bg-gray-200 px-3 py-1 rounded-full text-sm\"\n            >\n              {tag}\n            </span>\n          ))}\n        </div>\n      </div>\n    </div>\n  );\n}\n\nexport default PostPage;\n```\n2. Create a ShareButtons component for social media sharing\n3. Implement proper HTML sanitization for content (consider using DOMPurify)\n4. Style the page with Tailwind CSS and @tailwindcss/typography for content\n5. Add Open Graph meta tags for better sharing experience",
-        "testStrategy": "Test the post detail page with different types of posts (with/without video). Verify content renders correctly and safely. Test share buttons functionality. Verify responsive behavior on different screen sizes. Test with actual API data once available.",
-        "priority": "high",
-        "dependencies": [
-          5
-        ],
-        "status": "pending",
-        "subtasks": []
-      },
-      {
-        "id": 9,
-        "title": "Implement Video Page",
-        "description": "Create a dedicated video page with grid layout, embedded videos, and thumbnail previews.",
-        "details": "1. Create the VideoPage component:\n```jsx\nimport { useState, useEffect } from 'react';\nimport { useSearchParams } from 'react-router-dom';\nimport { fetchPosts } from '../services/api';\nimport VideoCard from '../components/video/VideoCard';\nimport Pagination from '../components/shared/Pagination';\n\nfunction VideoPage() {\n  const [searchParams, setSearchParams] = useSearchParams();\n  const page = parseInt(searchParams.get('page') || '1');\n  \n  const [videos, setVideos] = useState([]);\n  const [totalPages, setTotalPages] = useState(1);\n  const [loading, setLoading] = useState(true);\n  const [error, setError] = useState(null);\n\n  useEffect(() => {\n    const loadVideos = async () => {\n      try {\n        setLoading(true);\n        const data = await fetchPosts(page, 12, 'videos');\n        setVideos(data.posts);\n        setTotalPages(data.totalPages);\n      } catch (err) {\n        setError(err.message);\n      } finally {\n        setLoading(false);\n      }\n    };\n    \n    loadVideos();\n  }, [page]);\n\n  const handlePageChange = (newPage) => {\n    setSearchParams({ page: newPage.toString() });\n  };\n\n  if (loading) return <div>Loading...</div>;\n  if (error) return <div>Error: {error}</div>;\n\n  return (\n    <div className=\"container mx-auto px-4 py-8\">\n      <h1 className=\"text-3xl font-bold mb-8\">Videos</h1>\n      \n      <div className=\"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6\">\n        {videos.map(video => (\n          <VideoCard key={video._id} video={video} />\n        ))}\n      </div>\n      \n      <Pagination \n        currentPage={page} \n        totalPages={totalPages} \n        onPageChange={handlePageChange} \n      />\n    </div>\n  );\n}\n\nexport default VideoPage;\n```\n2. Create a VideoCard component for displaying video previews:\n```jsx\nimport { useState } from 'react';\nimport { Link } from 'react-router-dom';\nimport ReactPlayer from 'react-player';\n\nfunction VideoCard({ video }) {\n  const [isPlaying, setIsPlaying] = useState(false);\n  \n  return (\n    <div className=\"bg-white rounded-lg shadow-md overflow-hidden\">\n      <div className=\"relative aspect-video\">\n        {isPlaying ? (\n          <ReactPlayer \n            url={video.videoUrl} \n            width=\"100%\"\n            height=\"100%\"\n            playing={isPlaying}\n            controls\n            onEnded={() => setIsPlaying(false)}\n          />\n        ) : (\n          <div \n            className=\"w-full h-full cursor-pointer relative\"\n            onClick={() => setIsPlaying(true)}\n          >\n            <img \n              src={video.thumbnailUrl} \n              alt={video.title} \n              className=\"w-full h-full object-cover\"\n            />\n            <div className=\"absolute inset-0 flex items-center justify-center\">\n              <div className=\"w-16 h-16 bg-red-600 rounded-full flex items-center justify-center\">\n                <svg className=\"w-8 h-8 text-white\" fill=\"currentColor\" viewBox=\"0 0 24 24\">\n                  <path d=\"M8 5v14l11-7z\" />\n                </svg>\n              </div>\n            </div>\n          </div>\n        )}\n      </div>\n      \n      <div className=\"p-4\">\n        <Link to={`/post/${video.slug}`} className=\"text-xl font-semibold hover:text-blue-600\">\n          {video.title}\n        </Link>\n        <p className=\"text-gray-500 mt-2\">\n          {new Date(video.createdAt).toLocaleDateString()}\n        </p>\n      </div>\n    </div>\n  );\n}\n\nexport default VideoCard;\n```\n3. Implement lazy loading for video thumbnails\n4. Add play/pause functionality for video previews\n5. Style with Tailwind CSS and shadcn/ui",
-        "testStrategy": "Test the video page with different videos to ensure they display correctly. Test video playback functionality. Verify responsive behavior on different screen sizes. Test pagination. Test with actual API data once available.",
+        "title": "Implement Trending Section and Optional Carousel",
+        "description": "Add trending section to homepage with top 10 trending posts and optional carousel.",
+        "details": "Fetch top 10 trending posts from API. Display as list or carousel (use Framer Motion for optional animation). Ensure mobile-friendly design. Use shadcn/ui for carousel component if needed.",
+        "testStrategy": "Test trending section and carousel functionality. Verify data fetching and responsiveness.",
         "priority": "medium",
-        "dependencies": [
-          5
-        ],
-        "status": "pending",
-        "subtasks": []
-      },
-      {
-        "id": 10,
-        "title": "Implement Trending Section",
-        "description": "Create a trending section that displays the top 10 trending posts marked as isTrending.",
-        "details": "1. Create the TrendingSection component:\n```jsx\nimport { Link } from 'react-router-dom';\n\nfunction TrendingSection({ posts }) {\n  if (!posts || posts.length === 0) return null;\n  \n  return (\n    <div className=\"my-12\">\n      <h2 className=\"text-2xl font-bold mb-6\">Trending</h2>\n      \n      <div className=\"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4\">\n        {posts.slice(0, 10).map((post, index) => (\n          <Link \n            key={post._id} \n            to={`/post/${post.slug}`}\n            className={`relative overflow-hidden rounded-lg ${index === 0 ? 'lg:col-span-2 lg:row-span-2' : ''}`}\n          >\n            <div className=\"aspect-video w-full\">\n              <img \n                src={post.thumbnailUrl} \n                alt={post.title} \n                className=\"w-full h-full object-cover\"\n              />\n            </div>\n            <div className=\"absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex flex-col justify-end p-4\">\n              <h3 className=\"text-white font-semibold\">{post.title}</h3>\n              <span className=\"text-white/80 text-sm\">{post.category}</span>\n            </div>\n          </Link>\n        ))}\n      </div>\n    </div>\n  );\n}\n\nexport default TrendingSection;\n```\n2. Optionally, implement a carousel for the trending section using a library like Swiper or a custom solution\n3. Add hover effects and transitions using Tailwind CSS\n4. Ensure responsive behavior for all screen sizes\n5. Add category badges to trending items",
-        "testStrategy": "Test the trending section with different numbers of posts to ensure it displays correctly. Verify responsive behavior on different screen sizes. Test hover effects and transitions. Test with actual API data once available.",
-        "priority": "medium",
-        "dependencies": [
-          6
-        ],
-        "status": "pending",
-        "subtasks": []
-      },
-      {
-        "id": 11,
-        "title": "Implement Admin Interface",
-        "description": "Create a minimal admin interface for adding, editing, and deleting posts.",
-        "details": "1. Create the AdminPage component:\n```jsx\nimport { useState, useEffect } from 'react';\nimport { fetchPosts, deletePost } from '../services/api';\nimport AdminPostForm from '../components/admin/AdminPostForm';\nimport AdminPostList from '../components/admin/AdminPostList';\n\nfunction AdminPage() {\n  const [posts, setPosts] = useState([]);\n  const [selectedPost, setSelectedPost] = useState(null);\n  const [loading, setLoading] = useState(true);\n  const [error, setError] = useState(null);\n\n  const loadPosts = async () => {\n    try {\n      setLoading(true);\n      const data = await fetchPosts(1, 100); // Load more posts for admin\n      setPosts(data.posts);\n    } catch (err) {\n      setError(err.message);\n    } finally {\n      setLoading(false);\n    }\n  };\n\n  useEffect(() => {\n    loadPosts();\n  }, []);\n\n  const handleEdit = (post) => {\n    setSelectedPost(post);\n  };\n\n  const handleDelete = async (id) => {\n    if (window.confirm('Are you sure you want to delete this post?')) {\n      try {\n        await deletePost(id);\n        loadPosts(); // Reload posts after deletion\n      } catch (err) {\n        setError(err.message);\n      }\n    }\n  };\n\n  const handleFormSubmit = () => {\n    setSelectedPost(null);\n    loadPosts(); // Reload posts after submission\n  };\n\n  if (loading) return <div>Loading...</div>;\n  if (error) return <div>Error: {error}</div>;\n\n  return (\n    <div className=\"container mx-auto px-4 py-8\">\n      <h1 className=\"text-3xl font-bold mb-8\">Admin Dashboard</h1>\n      \n      <div className=\"grid grid-cols-1 lg:grid-cols-2 gap-8\">\n        <div>\n          <h2 className=\"text-xl font-semibold mb-4\">\n            {selectedPost ? 'Edit Post' : 'Add New Post'}\n          </h2>\n          <AdminPostForm \n            post={selectedPost} \n            onSubmit={handleFormSubmit} \n          />\n        </div>\n        \n        <div>\n          <h2 className=\"text-xl font-semibold mb-4\">Posts</h2>\n          <AdminPostList \n            posts={posts} \n            onEdit={handleEdit} \n            onDelete={handleDelete} \n          />\n        </div>\n      </div>\n    </div>\n  );\n}\n\nexport default AdminPage;\n```\n2. Create the AdminPostForm component for adding/editing posts\n3. Create the AdminPostList component for displaying and managing posts\n4. Implement form validation and error handling\n5. Add rich text editor for post content (optional, can use simple textarea for MVP)\n6. Style with Tailwind CSS and shadcn/ui",
-        "testStrategy": "Test the admin interface with CRUD operations to ensure they work correctly. Test form validation and error handling. Verify the interface is usable and functional. Test with actual API data once available.",
-        "priority": "medium",
-        "dependencies": [
-          5
-        ],
-        "status": "pending",
-        "subtasks": []
-      },
-      {
-        "id": 12,
-        "title": "Implement Search Functionality (Phase 2)",
-        "description": "Add search functionality to allow users to search for posts by keywords in titles and tags.",
-        "details": "1. Add a search endpoint to the backend API:\n```js\n// In routes/posts.js\nrouter.get('/search', postsController.searchPosts);\n\n// In controllers/posts.js\nexports.searchPosts = async (req, res) => {\n  try {\n    const { q } = req.query;\n    if (!q) return res.status(400).json({ message: 'Search query is required' });\n    \n    const posts = await Post.find({\n      $or: [\n        { title: { $regex: q, $options: 'i' } },\n        { tags: { $regex: q, $options: 'i' } }\n      ]\n    }).limit(20);\n    \n    res.json(posts);\n  } catch (error) {\n    res.status(500).json({ message: error.message });\n  }\n};\n```\n2. Add a search function to the API service:\n```js\nexport const searchPosts = async (query) => {\n  const response = await fetch(`${API_URL}/search?q=${encodeURIComponent(query)}`);\n  if (!response.ok) throw new Error('Failed to search posts');\n  return response.json();\n};\n```\n3. Create a SearchBar component:\n```jsx\nimport { useState } from 'react';\nimport { useNavigate } from 'react-router-dom';\n\nfunction SearchBar() {\n  const [query, setQuery] = useState('');\n  const navigate = useNavigate();\n\n  const handleSubmit = (e) => {\n    e.preventDefault();\n    if (query.trim()) {\n      navigate(`/search?q=${encodeURIComponent(query.trim())}`);\n    }\n  };\n\n  return (\n    <form onSubmit={handleSubmit} className=\"relative\">\n      <input\n        type=\"text\"\n        value={query}\n        onChange={(e) => setQuery(e.target.value)}\n        placeholder=\"Search...\"\n        className=\"w-full py-2 px-4 pr-10 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500\"\n      />\n      <button\n        type=\"submit\"\n        className=\"absolute right-3 top-1/2 transform -translate-y-1/2\"\n      >\n        <svg className=\"w-5 h-5 text-gray-500\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">\n          <path strokeLinecap=\"round\" strokeLinejoin=\"round\" strokeWidth={2} d=\"M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z\" />\n        </svg>\n      </button>\n    </form>\n  );\n}\n\nexport default SearchBar;\n```\n4. Create a SearchPage component to display search results\n5. Add the search route to React Router\n6. Add the SearchBar component to the Header",
-        "testStrategy": "Test the search functionality with different queries to ensure it returns relevant results. Test edge cases like empty queries and special characters. Verify the search UI works correctly. Test with actual API data once available.",
-        "priority": "low",
         "dependencies": [
           3,
           4,
           5
         ],
         "status": "pending",
-        "subtasks": []
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Fetch Top 10 Trending Posts from API",
+            "description": "Implement logic to retrieve the top 10 trending posts from the backend API for display on the homepage.",
+            "dependencies": [],
+            "details": "Set up API calls using appropriate data fetching methods (e.g., fetch, axios, or React Query). Ensure error handling and loading states are managed.",
+            "status": "pending",
+            "testStrategy": "Mock API responses and verify that exactly 10 trending posts are fetched and available for rendering."
+          },
+          {
+            "id": 2,
+            "title": "Design Trending Section Layout",
+            "description": "Create a responsive layout for the trending section that adapts to both desktop and mobile devices.",
+            "dependencies": [
+              1
+            ],
+            "details": "Use CSS frameworks or utility classes (e.g., TailwindCSS) to ensure the section is visually appealing and mobile-friendly.",
+            "status": "pending",
+            "testStrategy": "Test layout on multiple screen sizes and devices to confirm responsiveness and accessibility."
+          },
+          {
+            "id": 3,
+            "title": "Implement Trending Posts List View",
+            "description": "Display the fetched trending posts in a standard list format as the default view.",
+            "dependencies": [
+              2
+            ],
+            "details": "Map over the trending posts data to render each post with relevant details (e.g., title, image, summary).",
+            "status": "pending",
+            "testStrategy": "Verify that all 10 posts are rendered correctly and that the list is accessible via keyboard navigation."
+          },
+          {
+            "id": 4,
+            "title": "Integrate Optional Carousel with Animation",
+            "description": "Add an optional carousel view for the trending section using shadcn/ui's carousel component and Framer Motion for animation.",
+            "dependencies": [
+              2
+            ],
+            "details": "Install and configure shadcn/ui carousel component. Use Framer Motion to add smooth transitions and animations between slides. Allow users to toggle between list and carousel views.",
+            "status": "pending",
+            "testStrategy": "Switch between list and carousel views, ensuring carousel functionality (slide, autoplay, animation) works as expected on all devices."
+          },
+          {
+            "id": 5,
+            "title": "Finalize and Test Mobile-Friendly Design",
+            "description": "Ensure the trending section, including both list and carousel views, is fully optimized for mobile devices.",
+            "dependencies": [
+              3,
+              4
+            ],
+            "details": "Perform cross-device testing, adjust touch targets, and optimize performance for mobile users.",
+            "status": "pending",
+            "testStrategy": "Conduct manual and automated tests on various mobile devices and browsers to confirm usability, responsiveness, and performance."
+          }
+        ]
       },
       {
-        "id": 13,
-        "title": "Implement SEO Optimization",
-        "description": "Add SEO optimization features including meta titles/descriptions, Open Graph tags, and human-readable URLs.",
-        "details": "1. Install React Helmet for managing document head: `npm install react-helmet-async`\n2. Set up React Helmet in the app:\n```jsx\n// In main.jsx\nimport { HelmetProvider } from 'react-helmet-async';\n\nReactDOM.createRoot(document.getElementById('root')).render(\n  <React.StrictMode>\n    <HelmetProvider>\n      <App />\n    </HelmetProvider>\n  </React.StrictMode>,\n);\n```\n3. Create a SEO component:\n```jsx\nimport { Helmet } from 'react-helmet-async';\n\nfunction SEO({ title, description, image, url, type = 'website' }) {\n  const siteTitle = 'House 31';\n  const fullTitle = title ? `${title} | ${siteTitle}` : siteTitle;\n  const defaultDescription = 'House 31 - Your source for trending news, viral videos, and entertainment content.';\n  const defaultImage = '/og-image.jpg'; // Default OG image\n  \n  return (\n    <Helmet>\n      <title>{fullTitle}</title>\n      <meta name=\"description\" content={description || defaultDescription} />\n      \n      {/* Open Graph / Facebook */}\n      <meta property=\"og:type\" content={type} />\n      <meta property=\"og:url\" content={url || window.location.href} />\n      <meta property=\"og:title\" content={fullTitle} />\n      <meta property=\"og:description\" content={description || defaultDescription} />\n      <meta property=\"og:image\" content={image || defaultImage} />\n      \n      {/* Twitter */}\n      <meta property=\"twitter:card\" content=\"summary_large_image\" />\n      <meta property=\"twitter:url\" content={url || window.location.href} />\n      <meta property=\"twitter:title\" content={fullTitle} />\n      <meta property=\"twitter:description\" content={description || defaultDescription} />\n      <meta property=\"twitter:image\" content={image || defaultImage} />\n    </Helmet>\n  );\n}\n\nexport default SEO;\n```\n4. Add the SEO component to all pages with appropriate metadata\n5. Ensure all URLs are human-readable using slugs\n6. Add canonical URLs for duplicate content\n7. Create a sitemap.xml generator",
-        "testStrategy": "Test SEO implementation by inspecting the document head on different pages. Verify Open Graph tags are correctly set. Test with social media preview tools. Ensure all URLs are human-readable and consistent.",
+        "id": 9,
+        "title": "Create Minimal Admin Interface",
+        "description": "Build simple admin interface for posting, editing, and deleting content.",
+        "details": "Create /admin route with basic form for adding/editing posts. Use Express route for admin operations. Optionally allow manual DB entry. Add input validation and error feedback. Use basic auth or JWT for security.",
+        "testStrategy": "Test admin form submission, editing, and deletion. Verify security and validation.",
         "priority": "medium",
         "dependencies": [
-          6,
-          7,
-          8,
-          9
+          3
         ],
         "status": "pending",
-        "subtasks": []
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Set Up Express Application and /admin Route",
+            "description": "Initialize a new Express.js project and create the /admin route to serve the admin interface.",
+            "dependencies": [],
+            "details": "Install Express, set up the basic server, and define the /admin route as the entry point for admin operations.",
+            "status": "pending",
+            "testStrategy": "Start the server and verify that accessing /admin returns a response."
+          },
+          {
+            "id": 2,
+            "title": "Design Admin Interface Forms",
+            "description": "Create minimal HTML forms for posting, editing, and deleting content within the admin interface.",
+            "dependencies": [
+              1
+            ],
+            "details": "Develop simple forms for adding, editing, and deleting posts, ensuring they are accessible via the /admin route.",
+            "status": "pending",
+            "testStrategy": "Manually test form rendering and input fields in the browser."
+          },
+          {
+            "id": 3,
+            "title": "Implement Admin Operations in Express Routes",
+            "description": "Develop Express route handlers for creating, updating, and deleting content based on form submissions.",
+            "dependencies": [
+              2
+            ],
+            "details": "Connect form actions to Express routes that handle CRUD operations, optionally allowing manual DB entry.",
+            "status": "pending",
+            "testStrategy": "Submit forms and verify that content is correctly created, updated, or deleted in the database."
+          },
+          {
+            "id": 4,
+            "title": "Add Input Validation and Error Feedback",
+            "description": "Integrate input validation for admin forms and provide user-friendly error messages on invalid input.",
+            "dependencies": [
+              3
+            ],
+            "details": "Use validation middleware or custom logic to check form data and display errors within the admin interface.",
+            "status": "pending",
+            "testStrategy": "Test with invalid and valid inputs to ensure errors are caught and displayed appropriately."
+          },
+          {
+            "id": 5,
+            "title": "Secure Admin Interface with Authentication",
+            "description": "Implement basic authentication or JWT-based security to restrict access to the admin interface.",
+            "dependencies": [
+              4
+            ],
+            "details": "Add middleware for basic auth or JWT verification to protect all /admin routes and operations.",
+            "status": "pending",
+            "testStrategy": "Attempt to access /admin without authentication and verify access is denied; test with valid credentials to confirm access is granted."
+          }
+        ]
       },
       {
-        "id": 14,
-        "title": "Implement Performance Optimizations",
-        "description": "Optimize performance with lazy loading for images/videos, code splitting, and other performance enhancements.",
-        "details": "1. Implement lazy loading for images using Intersection Observer API:\n```jsx\nimport { useEffect, useRef, useState } from 'react';\n\nfunction LazyImage({ src, alt, className }) {\n  const [isLoaded, setIsLoaded] = useState(false);\n  const imgRef = useRef();\n\n  useEffect(() => {\n    const observer = new IntersectionObserver((entries) => {\n      if (entries[0].isIntersecting) {\n        setIsLoaded(true);\n        observer.disconnect();\n      }\n    });\n    \n    if (imgRef.current) {\n      observer.observe(imgRef.current);\n    }\n    \n    return () => {\n      observer.disconnect();\n    };\n  }, []);\n\n  return (\n    <div ref={imgRef} className={className}>\n      {isLoaded ? (\n        <img \n          src={src} \n          alt={alt} \n          className=\"w-full h-full object-cover transition-opacity duration-300\"\n          loading=\"lazy\"\n        />\n      ) : (\n        <div className=\"w-full h-full bg-gray-200 animate-pulse\" />\n      )}\n    </div>\n  );\n}\n\nexport default LazyImage;\n```\n2. Implement code splitting with React.lazy and Suspense:\n```jsx\nimport { lazy, Suspense } from 'react';\n\nconst HomePage = lazy(() => import('./pages/HomePage'));\nconst CategoryPage = lazy(() => import('./pages/CategoryPage'));\nconst PostPage = lazy(() => import('./pages/PostPage'));\nconst VideoPage = lazy(() => import('./pages/VideoPage'));\nconst AdminPage = lazy(() => import('./pages/AdminPage'));\nconst SearchPage = lazy(() => import('./pages/SearchPage'));\n\nfunction App() {\n  return (\n    <BrowserRouter>\n      <Suspense fallback={<div>Loading...</div>}>\n        <Routes>\n          <Route path=\"/\" element={<Layout />}>\n            <Route index element={<HomePage />} />\n            <Route path=\"/news\" element={<CategoryPage category=\"news\" />} />\n            <Route path=\"/videos\" element={<VideoPage />} />\n            <Route path=\"/entertainment\" element={<CategoryPage category=\"entertainment\" />} />\n            <Route path=\"/post/:slug\" element={<PostPage />} />\n            <Route path=\"/search\" element={<SearchPage />} />\n            <Route path=\"/admin\" element={<AdminPage />} />\n          </Route>\n        </Routes>\n      </Suspense>\n    </BrowserRouter>\n  );\n}\n```\n3. Optimize images with responsive sizes and formats\n4. Implement memoization for expensive computations\n5. Add caching for API requests\n6. Configure Vite for optimal production builds",
-        "testStrategy": "Test performance optimizations using Lighthouse or similar tools. Verify lazy loading works for images and videos. Test code splitting by monitoring network requests. Measure and compare performance before and after optimizations.",
+        "id": 10,
+        "title": "Optimize for SEO and Performance",
+        "description": "Add meta tags, Open Graph, human-readable URLs, and lazy loading for images/videos.",
+        "details": "Use react-helmet-async (latest) for meta titles/descriptions and Open Graph tags. Ensure human-readable URLs. Implement lazy loading for images/videos. Optimize bundle size with Vite. Use modern image formats (WebP).",
+        "testStrategy": "Test meta tags, Open Graph, and URL structure. Verify lazy loading and performance metrics.",
         "priority": "medium",
         "dependencies": [
+          4,
+          5,
           6,
-          7,
-          8,
-          9
+          7
         ],
         "status": "pending",
-        "subtasks": []
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Implement Meta Tags and Open Graph with react-helmet-async",
+            "description": "Integrate react-helmet-async to dynamically manage meta titles, descriptions, and Open Graph tags for each page or route.",
+            "dependencies": [],
+            "details": "Install and configure react-helmet-async. Ensure each page/component sets unique and relevant meta tags, including Open Graph properties for social sharing.",
+            "status": "pending",
+            "testStrategy": "Verify meta tags and Open Graph tags are present and correct using browser dev tools and social media sharing debuggers."
+          },
+          {
+            "id": 2,
+            "title": "Ensure Human-Readable and SEO-Friendly URLs",
+            "description": "Configure routing to use clean, descriptive, and keyword-rich URLs throughout the application.",
+            "dependencies": [],
+            "details": "Use React Router or equivalent to define routes with human-readable paths. Avoid query strings and IDs where possible. Ensure URLs reflect page content and structure.",
+            "status": "pending",
+            "testStrategy": "Check all routes for readability and relevance. Use SEO tools to validate URL structure."
+          },
+          {
+            "id": 3,
+            "title": "Implement Lazy Loading for Images and Videos",
+            "description": "Add lazy loading to all images and videos to improve initial page load speed and performance.",
+            "dependencies": [],
+            "details": "Use native loading='lazy' attribute or React libraries for lazy loading. Ensure media loads only when in the viewport.",
+            "status": "pending",
+            "testStrategy": "Test with Lighthouse and browser dev tools to confirm images/videos load lazily and do not block initial render."
+          },
+          {
+            "id": 4,
+            "title": "Optimize Bundle Size with Vite",
+            "description": "Configure Vite to minimize JavaScript bundle size using code splitting, tree shaking, and other optimizations.",
+            "dependencies": [],
+            "details": "Enable code splitting and tree shaking in Vite config. Remove unused dependencies and monitor bundle size with Vite's analysis tools.",
+            "status": "pending",
+            "testStrategy": "Analyze bundle output and ensure reduction in size. Use Lighthouse to check for performance improvements."
+          },
+          {
+            "id": 5,
+            "title": "Use Modern Image Formats (WebP)",
+            "description": "Convert and serve images in modern formats like WebP to reduce file size and improve load times.",
+            "dependencies": [
+              3
+            ],
+            "details": "Update image assets to WebP where supported. Provide fallback formats for unsupported browsers if necessary.",
+            "status": "pending",
+            "testStrategy": "Inspect network requests to confirm WebP delivery. Measure image load times and verify visual quality."
+          }
+        ]
       },
       {
-        "id": 15,
-        "title": "Final Testing and Deployment",
-        "description": "Perform final testing, bug fixes, and deploy the application to production.",
-        "details": "1. Perform comprehensive testing:\n   - Cross-browser testing (Chrome, Firefox, Safari, Edge)\n   - Responsive design testing on different devices\n   - Functionality testing of all features\n   - Performance testing with Lighthouse\n   - Accessibility testing\n2. Fix any identified bugs and issues\n3. Set up deployment:\n   - Frontend: Deploy to Vercel or Netlify\n   - Backend: Deploy to Render or Railway\n   - Database: Set up MongoDB Atlas production cluster\n4. Configure environment variables for production\n5. Set up CI/CD pipeline (optional)\n6. Configure custom domain and SSL\n7. Implement monitoring and analytics\n8. Create documentation for future maintenance",
-        "testStrategy": "Perform end-to-end testing of the entire application. Verify all features work correctly in the production environment. Test deployment process to ensure it's smooth and repeatable. Monitor the application after deployment for any issues.",
-        "priority": "high",
+        "id": 11,
+        "title": "Implement Search Functionality (Phase 2)",
+        "description": "Add keyword search through titles and tags.",
+        "details": "Extend API to support search by title and tags. Add search bar to UI. Fetch and display results. Use MongoDB text index for efficient search. Ensure mobile-friendly search experience.",
+        "testStrategy": "Test search functionality with various queries. Verify results and performance.",
+        "priority": "low",
         "dependencies": [
+          3,
+          4
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Design Search API Extension",
+            "description": "Plan and define the API changes required to support keyword search through titles and tags, specifying request/response formats and endpoints.",
+            "dependencies": [],
+            "details": "Document the API contract for search, including query parameters for title and tag searches, and expected JSON response structure.",
+            "status": "pending",
+            "testStrategy": "Review API documentation for completeness and clarity; validate with sample requests."
+          },
+          {
+            "id": 2,
+            "title": "Implement MongoDB Text Indexes",
+            "description": "Create and configure MongoDB text indexes on the title and tags fields to enable efficient full-text search.",
+            "dependencies": [
+              1
+            ],
+            "details": "Use MongoDB's createIndex method to add text indexes to the relevant fields, ensuring both single-field and compound text indexes as needed for search performance and accuracy.[2][5]",
+            "status": "pending",
+            "testStrategy": "Verify index creation in the database; run sample text search queries to confirm correct indexing and search results."
+          },
+          {
+            "id": 3,
+            "title": "Develop Backend Search Logic",
+            "description": "Implement backend logic to process search queries, interact with MongoDB using text search, and return relevant results.",
+            "dependencies": [
+              2
+            ],
+            "details": "Update backend controllers to accept search parameters, construct MongoDB text search queries, and handle pagination and error cases.",
+            "status": "pending",
+            "testStrategy": "Unit test backend endpoints with various search terms; validate correct filtering and ranking of results."
+          },
+          {
+            "id": 4,
+            "title": "Integrate Search Bar into UI",
+            "description": "Add a search bar to the user interface, allowing users to input keywords for searching titles and tags.",
+            "dependencies": [
+              3
+            ],
+            "details": "Design and implement a responsive search bar component, ensuring accessibility and mobile compatibility.",
+            "status": "pending",
+            "testStrategy": "Test UI on multiple devices and screen sizes; confirm search bar usability and input handling."
+          },
+          {
+            "id": 5,
+            "title": "Fetch and Display Search Results",
+            "description": "Connect the UI search bar to the backend API, fetch search results, and display them in a user-friendly, mobile-optimized format.",
+            "dependencies": [
+              4
+            ],
+            "details": "Implement frontend logic to call the search API, handle loading and error states, and render results with clear highlighting of matched keywords.",
+            "status": "pending",
+            "testStrategy": "Perform end-to-end testing of the search flow; verify accurate and timely display of results on desktop and mobile."
+          }
+        ]
+      },
+      {
+        "id": 12,
+        "title": "Final Polish, Animations, and Deployment",
+        "description": "Add final UI/UX polish, optional animations, and deploy to production.",
+        "details": "Use Framer Motion (latest) for optional animations. Polish UI with shadcn/ui and Iconify. Test on multiple devices. Deploy frontend to Vercel/Netlify, backend to Render/Railway, and DB to MongoDB Atlas. Set up monitoring and error tracking.",
+        "testStrategy": "Test animations, UI polish, and deployment. Verify monitoring and error tracking.",
+        "priority": "medium",
+        "dependencies": [
+          4,
+          5,
           6,
           7,
           8,
           9,
           10,
-          11,
-          12,
-          13,
-          14
+          11
         ],
         "status": "pending",
-        "subtasks": []
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "UI/UX Final Polish with shadcn/ui and Iconify",
+            "description": "Refine and enhance the user interface and user experience using shadcn/ui components and Iconify icons for a modern, accessible, and visually appealing design.",
+            "dependencies": [],
+            "details": "Utilize shadcn/ui's customizable components and Iconify's icon library to ensure consistency, accessibility, and polish across all UI elements. Reference shadcn/ui documentation and community examples for best practices.",
+            "status": "pending",
+            "testStrategy": "Perform visual regression testing and manual UI reviews on multiple devices and browsers to ensure consistent appearance and usability."
+          },
+          {
+            "id": 2,
+            "title": "Implement Optional Animations with Framer Motion",
+            "description": "Integrate Framer Motion (latest version) to add smooth, optional animations that enhance user interactions without compromising performance.",
+            "dependencies": [
+              1
+            ],
+            "details": "Identify key UI elements and transitions that benefit from animation. Use Framer Motion to implement entrance, exit, and interactive animations, ensuring they are subtle and performant.",
+            "status": "pending",
+            "testStrategy": "Test animations on various devices and browsers for smoothness and accessibility. Confirm that animations do not hinder usability or accessibility."
+          },
+          {
+            "id": 3,
+            "title": "Cross-Device and Cross-Browser Testing",
+            "description": "Test the application on a range of devices and browsers to ensure consistent functionality, appearance, and performance.",
+            "dependencies": [
+              2
+            ],
+            "details": "Use device labs, emulators, and browser testing tools to validate UI, animations, and interactions. Address any layout or compatibility issues discovered.",
+            "status": "pending",
+            "testStrategy": "Document test coverage and issues found. Retest after fixes to confirm resolution."
+          },
+          {
+            "id": 4,
+            "title": "Production Deployment of Frontend, Backend, and Database",
+            "description": "Deploy the frontend to Vercel or Netlify, backend to Render or Railway, and database to MongoDB Atlas, ensuring secure and reliable production environments.",
+            "dependencies": [
+              3
+            ],
+            "details": "Follow platform-specific deployment guides. Configure environment variables, domains, and SSL. Validate successful deployment and connectivity between services.",
+            "status": "pending",
+            "testStrategy": "Perform smoke tests and end-to-end tests on the deployed environments to confirm correct operation."
+          },
+          {
+            "id": 5,
+            "title": "Set Up Monitoring and Error Tracking",
+            "description": "Implement monitoring and error tracking solutions for all production services to ensure ongoing reliability and rapid issue detection.",
+            "dependencies": [
+              4
+            ],
+            "details": "Integrate tools such as Sentry, LogRocket, or platform-native monitoring for frontend, backend, and database. Configure alerts and dashboards for proactive maintenance.",
+            "status": "pending",
+            "testStrategy": "Trigger test errors and monitor logs to verify that monitoring and alerting are functioning as expected."
+          }
+        ]
       }
     ],
     "metadata": {
-      "created": "2025-06-27T10:36:43.668Z",
-      "updated": "2025-06-27T11:06:38.479Z",
+      "created": "2025-06-27T10:50:40.438Z",
+      "updated": "2025-06-27T10:50:40.439Z",
       "description": "Tasks for master context"
     }
   }
