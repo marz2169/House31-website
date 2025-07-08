@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Header } from "@/components/Header"
 import { OptimizedImage } from "@/components/OptimizedImage"
-import { AdSense } from "@/components/AdSense"
+// import { AdSense } from "@/components/AdSense"
 
 interface VideoData {
   id: number
@@ -250,14 +250,14 @@ export default async function VideoPage({ params }: Props) {
               </div>
             </div>
 
-            {/* AdSense */}
-            <div className="mb-8">
+            {/* AdSense - Temporarily disabled for build */}
+            {/* <div className="mb-8">
               <AdSense 
                 adSlot="video-content-banner"
                 adFormat="auto"
                 className="w-full"
               />
-            </div>
+            </div> */}
 
             {/* Related Videos */}
             <section className="space-y-6">

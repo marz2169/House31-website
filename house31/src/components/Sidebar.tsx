@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { OptimizedImage } from "@/components/OptimizedImage"
-import { AdSense } from "@/components/AdSense"
+// import { AdSense } from "@/components/AdSense"
 
 // Mock data for trending tags
 const trendingTags = [
@@ -119,8 +119,8 @@ export function Sidebar() {
         </CardContent>
       </Card>
 
-      {/* AdSense Advertisement */}
-      <AdSense 
+      {/* AdSense Advertisement - Temporarily disabled */}
+      {/* <AdSense 
         adSlot="1234567890"
         adFormat="rectangle"
         className="min-h-[250px]"
@@ -130,7 +130,7 @@ export function Sidebar() {
           buttonText: "Subscribe Now",
           buttonLink: "/subscribe"
         }}
-      />
+      /> */}
 
       {/* Newsletter Signup */}
       <Card>

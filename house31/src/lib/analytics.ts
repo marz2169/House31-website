@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect } from 'react'
-import { usePathname, useSearchParams } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 
 declare global {
   interface Window {
@@ -183,8 +183,7 @@ export const analytics = new Analytics({
 // React hook for tracking page views
 export function useAnalytics() {
   const pathname = usePathname()
-  const searchParams = useSearchParams()
-
+  
   useEffect(() => {
     // Initialize analytics
     analytics.init()
@@ -193,10 +192,9 @@ export function useAnalytics() {
   useEffect(() => {
     // Track page views on route changes
     if (pathname) {
-      const url = pathname + (searchParams?.toString() ? `?${searchParams.toString()}` : '')
-      analytics.pageview(url)
+      analytics.pageview(pathname)
     }
-  }, [pathname, searchParams])
+  }, [pathname])
 
   return analytics
 }

@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import Link from "next/link"
 import { OptimizedImage } from "@/components/OptimizedImage"
-import { AdSense } from "@/components/AdSense"
+// import { AdSense } from "@/components/AdSense"
 import { getTrendingVideos } from "@/lib/syncData"
 
 interface TrendingVideo {
@@ -13,8 +13,8 @@ interface TrendingVideo {
   thumbnail: string
 }
 
-// Mock data for trending videos
-const mockTrendingVideos: TrendingVideo[] = [
+// Mock data for trending videos (exported for use in other components)
+export const mockTrendingVideos: TrendingVideo[] = [
   {
     id: 1,
     title: "AI-Powered Military Drones Transform Modern Warfare",
@@ -166,8 +166,8 @@ export async function TrendingVideos() {
           </Link>
         </div>
 
-        {/* AdSense Advertisement */}
-        <div className="mt-12">
+        {/* AdSense Advertisement - Temporarily disabled */}
+        {/* <div className="mt-12">
           <AdSense 
             adSlot="9876543210"
             adFormat="horizontal"
@@ -179,7 +179,7 @@ export async function TrendingVideos() {
               buttonLink: "/videos"
             }}
           />
-        </div>
+        </div> */}
     </div>
   )
 }

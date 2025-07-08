@@ -86,21 +86,9 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          rel="preload"
+          rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap"
-          as="style"
-          onLoad={(e) => {
-            const target = e.target as HTMLLinkElement;
-            target.onload = null;
-            target.rel = 'stylesheet';
-          }}
         />
-        <noscript>
-          <link
-            rel="stylesheet"
-            href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap"
-          />
-        </noscript>
         
         {/* DNS prefetching for external resources */}
         <link rel="dns-prefetch" href="https://picsum.photos" />
