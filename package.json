@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "tailwindcss-animate": "^1.0.7",
     "task-master-ai": "^0.18.0"
   }
 }

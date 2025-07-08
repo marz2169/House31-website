@@ -1,0 +1,26 @@
+# MongoDB Local Development Setup
+version: '3.8'
+
+services:
+  mongodb-local:
+    image: mongo:7.0
+    container_name: house31-mongodb-local
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: house31admin
+      MONGO_INITDB_ROOT_PASSWORD: house31password
+      MONGO_INITDB_DATABASE: house31-website
+    volumes:
+      - mongodb_data_local:/data/db
+      - ./scripts/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    networks:
+      - house31-network
+
+volumes:
+  mongodb_data_local:
+
+networks:
+  house31-network:
+    driver: bridge

@@ -13,4 +13,39 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  server: {
+    port: 5173,
+    host: true,
+    strictPort: true,
+    hmr: {
+      port: 5173,
+    },
+  },
+  build: {
+    // Enable source maps for debugging in production
+    sourcemap: false,
+    // Optimize chunk size
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          // Separate vendor dependencies
+          'react-vendor': ['react', 'react-dom'],
+          'router-vendor': ['react-router-dom'],
+          'player-vendor': ['react-player'],
+          'ui-vendor': ['@radix-ui/react-slot', 'class-variance-authority', 'clsx', 'tailwind-merge'],
+        }
+      }
+    },
+    // Optimize chunk size threshold
+    chunkSizeWarningLimit: 1000
+  },
+  // Performance optimizations
+  optimizeDeps: {
+    include: [
+      'react', 
+      'react-dom', 
+      'react-router-dom', 
+      'react-player'
+    ]
+  }
 })
