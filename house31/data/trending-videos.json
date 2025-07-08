@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "title": "Breaking: AI Revolution in Military Technology",
+    "views": "198K views",
+    "category": "AI",
+    "slug": "breaking-ai-revolution-in-military-technology",
+    "thumbnail": "https://picsum.photos/400/225?random=100",
+    "videoLink": "https://example.com/video/1",
+    "postUrl": "https://facebook.com/house31/posts/test1",
+    "postDate": "2025-01-08T10:00:00Z",
+    "description": "Revolutionary AI technology is transforming modern military operations. This breakthrough could change the future of defense systems worldwide."
+  },
+  {
+    "id": 2,
+    "title": "Space News: Mars Mission Updates",
+    "views": "307K views",
+    "category": "SPACE",
+    "slug": "space-news-mars-mission-updates",
+    "thumbnail": "https://picsum.photos/400/225?random=101",
+    "videoLink": null,
+    "postUrl": "https://facebook.com/house31/posts/test2",
+    "postDate": "2025-01-08T08:30:00Z",
+    "description": "Latest updates from NASA's Mars exploration mission reveal groundbreaking discoveries about the red planet."
+  },
+  {
+    "id": 3,
+    "title": "Conspiracy Theory: Government Tech Secrets",
+    "views": "264K views",
+    "category": "TECH",
+    "slug": "conspiracy-theory-government-tech-secrets",
+    "thumbnail": "https://picsum.photos/400/225?random=102",
+    "videoLink": "https://example.com/video/3",
+    "postUrl": "https://facebook.com/house31/posts/test3",
+    "postDate": "2025-01-08T06:15:00Z",
+    "description": "Leaked documents reveal classified technology projects that could reshape our understanding of government capabilities."
+  }
+]

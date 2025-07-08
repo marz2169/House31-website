@@ -931,11 +931,74 @@
             "testStrategy": "Create a checklist of development workflow features to verify, including HMR, linting, type checking, and build process. Document any configuration changes made."
           }
         ]
+      },
+      {
+        "id": 14,
+        "title": "Enhance UI System with Modern Design Patterns and Dark Mode",
+        "description": "Upgrade the website styling with modern design patterns and implement a dark/light mode toggle functionality with smooth transitions between themes.",
+        "details": "This task involves enhancing the UI system with modern design patterns and implementing a theme switching capability:\n\n1. **Theme Provider Implementation**:\n   - Create a ThemeProvider component using React Context API to manage theme state\n   - Define theme constants for both light and dark modes (colors, spacing, typography, etc.)\n   - Store theme preference in localStorage to persist user selection\n   - Add system preference detection using `window.matchMedia('(prefers-color-scheme: dark)')`\n\n2. **Dark/Light Theme Toggle Component**:\n   - Build a reusable Toggle component with appropriate styling\n   - Position the toggle in the site header for easy access\n   - Add appropriate icons (sun/moon) to indicate current theme\n   - Implement accessibility features (keyboard navigation, ARIA attributes)\n\n3. **Consistent Styling Across Components**:\n   - Refactor existing components to use theme variables instead of hardcoded values\n   - Update Tailwind configuration to support theme switching:\n     ```js\n     // tailwind.config.js example\n     module.exports = {\n       darkMode: 'class',\n       theme: {\n         extend: {\n           colors: {\n             // Define theme colors that will change based on mode\n             primary: 'var(--color-primary)',\n             secondary: 'var(--color-secondary)',\n             // etc.\n           }\n         }\n       }\n     }\n     ```\n   - Create CSS variables for both themes:\n     ```css\n     :root {\n       --color-primary: #3b82f6;\n       --color-secondary: #10b981;\n       --text-primary: #111827;\n       --bg-primary: #ffffff;\n       /* etc. */\n     }\n     \n     .dark {\n       --color-primary: #60a5fa;\n       --color-secondary: #34d399;\n       --text-primary: #f9fafb;\n       --bg-primary: #111827;\n       /* etc. */\n     }\n     ```\n   - Ensure all shadcn/ui components properly support theme switching\n\n4. **Theme Transition Effects**:\n   - Add CSS transitions for smooth theme changes:\n     ```css\n     * {\n       transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;\n     }\n     ```\n   - Optimize transitions to prevent performance issues (limit to color properties)\n   - Test and adjust transition timing for optimal user experience\n\n5. **Integration with Existing Components**:\n   - Update all page layouts and components to properly use theme variables\n   - Ensure proper contrast ratios for accessibility in both themes\n   - Test all UI components in both light and dark modes",
+        "testStrategy": "1. **Theme Provider Testing**:\n   - Verify theme state is correctly managed and persisted in localStorage\n   - Test system preference detection works correctly\n   - Ensure theme context is properly accessible throughout the component tree\n\n2. **Toggle Component Testing**:\n   - Verify toggle UI renders correctly in both themes\n   - Test toggle interaction (click, keyboard) properly switches themes\n   - Confirm appropriate aria attributes are present for accessibility\n   - Test that toggle state reflects the current theme\n\n3. **Styling Consistency Testing**:\n   - Create a visual test suite comparing all components in both themes\n   - Verify all components maintain proper contrast ratios in both themes\n   - Check that no hardcoded color values remain in the codebase\n   - Test responsive behavior in both themes across different screen sizes\n\n4. **Transition Testing**:\n   - Measure and optimize transition performance (should be under 100ms)\n   - Verify transitions appear smooth on various devices and browsers\n   - Test that no UI elements \"flash\" or display incorrectly during transition\n   - Ensure transitions don't cause layout shifts\n\n5. **Integration Testing**:\n   - Test theme switching on all major pages and components\n   - Verify theme preference persists across page navigation\n   - Test initial load with both system preference and saved preference\n   - Conduct user testing to gather feedback on theme implementation",
+        "status": "done",
+        "dependencies": [
+          5,
+          6,
+          7,
+          8,
+          13
+        ],
+        "priority": "medium",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Implement ThemeProvider with React Context API",
+            "description": "Create a ThemeProvider component using React Context API to manage theme state across the application, including theme constants definition and persistence.",
+            "dependencies": [],
+            "details": "1. Create a new ThemeContext.tsx file with a React Context for theme state\n2. Define comprehensive theme constants for both light and dark modes (colors, spacing, typography)\n3. Implement the ThemeProvider component with state management for current theme\n4. Add localStorage integration to persist user theme preference\n5. Implement system preference detection using window.matchMedia\n6. Export useTheme hook for components to consume theme context",
+            "status": "done",
+            "testStrategy": "Write unit tests for the ThemeProvider component, verifying it correctly manages theme state, persists to localStorage, and detects system preferences."
+          },
+          {
+            "id": 2,
+            "title": "Configure CSS Variables and Tailwind for Theme Support",
+            "description": "Set up the CSS foundation for theme switching by configuring CSS variables and updating the Tailwind configuration to support dynamic theming.",
+            "dependencies": [],
+            "details": "1. Create a global CSS file with CSS variables for both themes\n2. Define variables for colors, backgrounds, text, borders, etc. in :root and .dark selectors\n3. Update Tailwind configuration to use 'class' for dark mode\n4. Extend Tailwind theme to use CSS variables instead of hardcoded values\n5. Create a theme-utils.ts file with helper functions for theme manipulation",
+            "status": "done",
+            "testStrategy": "Verify CSS variables are properly applied in both themes by creating a test page that displays all theme variables and checking them in both modes."
+          },
+          {
+            "id": 3,
+            "title": "Build Theme Toggle Component with Accessibility Features",
+            "description": "Create a reusable toggle component for switching between light and dark themes with appropriate styling and accessibility features.",
+            "dependencies": [],
+            "details": "1. Create a ThemeToggle.tsx component with toggle functionality\n2. Style the toggle with appropriate sun/moon icons to indicate current theme\n3. Position the toggle in the site header for easy access\n4. Implement keyboard navigation (tab focus, space/enter to toggle)\n5. Add ARIA attributes (aria-pressed, aria-label) for screen readers\n6. Connect the toggle to the ThemeProvider context",
+            "status": "done",
+            "testStrategy": "Test keyboard navigation and screen reader compatibility. Verify the toggle correctly updates the theme context and persists changes."
+          },
+          {
+            "id": 4,
+            "title": "Implement Smooth Theme Transition Effects",
+            "description": "Add CSS transitions for smooth theme changes while ensuring good performance and user experience.",
+            "dependencies": [],
+            "details": "1. Add CSS transitions for color-related properties in the global stylesheet\n2. Limit transitions to specific properties (background-color, color, border-color) to prevent performance issues\n3. Set appropriate timing (0.2-0.3s) and easing functions for natural transitions\n4. Add a utility class to disable transitions during initial page load\n5. Test performance impact and optimize as needed\n6. Create a ThemeTransition component that wraps the app to handle transition timing",
+            "status": "done",
+            "testStrategy": "Measure performance metrics during theme transitions. Test on various devices to ensure smooth transitions without noticeable lag or flickering."
+          },
+          {
+            "id": 5,
+            "title": "Refactor Existing Components to Use Theme Variables",
+            "description": "Update all existing components to use theme variables instead of hardcoded values and ensure proper appearance in both light and dark modes.",
+            "dependencies": [],
+            "details": "1. Audit existing components for hardcoded color values\n2. Refactor components to use theme variables or Tailwind classes\n3. Update shadcn/ui components to properly support theme switching\n4. Ensure proper contrast ratios for accessibility in both themes\n5. Create a theme testing page that displays all components in both themes\n6. Fix any inconsistencies or styling issues that appear in either theme",
+            "status": "done",
+            "testStrategy": "Create visual regression tests comparing components in both themes. Conduct accessibility testing to verify contrast ratios meet WCAG standards in both themes."
+          }
+        ]
       }
     ],
     "metadata": {
       "created": "2025-06-27T10:50:40.438Z",
-      "updated": "2025-07-05T09:28:02.923Z",
+      "updated": "2025-07-08T12:53:35.838Z",
       "description": "Tasks for master context"
     }
   }

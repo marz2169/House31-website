@@ -1,0 +1,36 @@
+{
+  "posts": [
+    {
+      "id": "test_post_1",
+      "title": "Breaking: AI Revolution in Military Technology",
+      "thumbnailUrl": "https://picsum.photos/400/225?random=100",
+      "description": "Revolutionary AI technology is transforming modern military operations. This breakthrough could change the future of defense systems worldwide.",
+      "videoLink": "https://example.com/video/1",
+      "postDate": "2025-01-08T10:00:00Z",
+      "postUrl": "https://facebook.com/house31/posts/test1",
+      "type": "video"
+    },
+    {
+      "id": "test_post_2",
+      "title": "Space News: Mars Mission Updates",
+      "thumbnailUrl": "https://picsum.photos/400/225?random=101",
+      "description": "Latest updates from NASA's Mars exploration mission reveal groundbreaking discoveries about the red planet.",
+      "videoLink": null,
+      "postDate": "2025-01-08T08:30:00Z",
+      "postUrl": "https://facebook.com/house31/posts/test2",
+      "type": "link"
+    },
+    {
+      "id": "test_post_3",
+      "title": "Conspiracy Theory: Government Tech Secrets",
+      "thumbnailUrl": "https://picsum.photos/400/225?random=102",
+      "description": "Leaked documents reveal classified technology projects that could reshape our understanding of government capabilities.",
+      "videoLink": "https://example.com/video/3",
+      "postDate": "2025-01-08T06:15:00Z",
+      "postUrl": "https://facebook.com/house31/posts/test3",
+      "type": "video"
+    }
+  ],
+  "syncedAt": "2025-07-08T14:51:57.422Z",
+  "source": "facebook"
+}

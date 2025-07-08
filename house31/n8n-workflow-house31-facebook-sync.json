@@ -1,0 +1,279 @@
+{
+  "name": "House31 Facebook Sync Workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 4
+            }
+          ]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "page",
+        "operation": "getPage",
+        "pageId": "={{$env.FACEBOOK_PAGE_ID}}",
+        "additionalFields": {
+          "fields": "posts{id,message,created_time,attachments{media,url,title,description},permalink_url,link,name,caption,description,picture,full_picture,type}"
+        }
+      },
+      "id": "facebook-get-posts",
+      "name": "Facebook Get Posts",
+      "type": "n8n-nodes-base.facebookGraphApi",
+      "typeVersion": 1,
+      "position": [
+        460,
+        300
+      ],
+      "credentials": {
+        "facebookGraphApi": {
+          "id": "facebook-credentials",
+          "name": "Facebook Graph API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "functionCode": "// Extract and process Facebook posts\nconst posts = $input.all()[0].json.posts.data;\nconst processedPosts = [];\n\n// Process each post\nfor (let i = 0; i < Math.min(posts.length, 5); i++) {\n  const post = posts[i];\n  \n  // Check if post has video or external link\n  const hasVideo = post.attachments && \n    post.attachments.data.some(att => \n      att.media && att.media.image || \n      att.type === 'video_inline' ||\n      post.type === 'video'\n    );\n  \n  const hasLink = post.link || \n    (post.attachments && \n     post.attachments.data.some(att => att.url));\n  \n  // Only process posts with video or links\n  if (hasVideo || hasLink) {\n    const attachment = post.attachments ? post.attachments.data[0] : null;\n    \n    const processedPost = {\n      id: post.id,\n      title: post.name || \n             post.message?.substring(0, 100) || \n             'House31 Update',\n      description: post.message || \n                  post.caption || \n                  post.description || \n                  'Latest update from House31',\n      thumbnailUrl: post.full_picture || \n                   post.picture || \n                   (attachment && attachment.media && attachment.media.image && attachment.media.image.src) ||\n                   'https://picsum.photos/400/225?random=' + i,\n      videoLink: hasVideo ? (post.link || (attachment && attachment.url)) : null,\n      postUrl: post.permalink_url,\n      postDate: post.created_time,\n      type: hasVideo ? 'video' : 'link'\n    };\n    \n    processedPosts.push(processedPost);\n  }\n}\n\nreturn {\n  posts: processedPosts,\n  totalProcessed: processedPosts.length,\n  processedAt: new Date().toISOString()\n};"
+      },
+      "id": "process-posts",
+      "name": "Process Posts",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        680,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json.totalProcessed}}",
+              "operation": "isNotEmpty"
+            },
+            {
+              "value1": "={{$json.totalProcessed}}",
+              "operation": "largerEqual",
+              "value2": "1"
+            }
+          ]
+        }
+      },
+      "id": "filter-has-content",
+      "name": "Filter: Has Content",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        900,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{$env.NEXTJS_API_URL}}/api/sync",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer ={{$env.API_SECRET_KEY}}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "posts",
+              "value": "={{$json.posts}}"
+            },
+            {
+              "name": "source",
+              "value": "facebook"
+            },
+            {
+              "name": "workflowId",
+              "value": "house31-facebook-sync"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "send-to-nextjs",
+      "name": "Send to Next.js API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        1120,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "append",
+        "sheetId": "={{$env.GOOGLE_SHEET_ID}}",
+        "range": "A:F",
+        "valueInputOption": "USER_ENTERED",
+        "valueRenderOption": "FORMATTED_VALUE",
+        "values": "={{$json.posts.map(post => [new Date().toISOString(), post.title, post.type, post.postDate, post.postUrl, post.description.substring(0, 100)])}}"
+      },
+      "id": "log-to-sheets",
+      "name": "Log to Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [
+        1120,
+        400
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "google-sheets-credentials",
+          "name": "Google Sheets"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "functionCode": "// Log successful sync\nconst syncResult = $input.all()[0].json;\nconst sheetsResult = $input.all()[1] ? $input.all()[1].json : null;\n\nconsole.log('✅ Facebook sync completed successfully');\nconsole.log(`📊 Posts processed: ${syncResult.posts || 0}`);\nconsole.log(`🕒 Synced at: ${syncResult.syncedAt}`);\n\nif (sheetsResult) {\n  console.log('📝 Data logged to Google Sheets');\n}\n\nreturn {\n  success: true,\n  message: 'House31 Facebook sync completed',\n  postsProcessed: syncResult.posts || 0,\n  syncedAt: syncResult.syncedAt,\n  googleSheetsLogged: !!sheetsResult\n};"
+      },
+      "id": "log-success",
+      "name": "Log Success",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        1340,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "functionCode": "// Log when no content is found\nconsole.log('⚠️ No valid content found in Facebook posts');\nconsole.log('Posts may not contain videos or external links');\n\nreturn {\n  success: false,\n  message: 'No valid content found',\n  postsProcessed: 0,\n  reason: 'No posts with video or external links found'\n};"
+      },
+      "id": "log-no-content",
+      "name": "Log No Content",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        560
+      ]
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Facebook Get Posts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Facebook Get Posts": {
+      "main": [
+        [
+          {
+            "node": "Process Posts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Process Posts": {
+      "main": [
+        [
+          {
+            "node": "Filter: Has Content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter: Has Content": {
+      "main": [
+        [
+          {
+            "node": "Send to Next.js API",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Log to Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Log No Content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send to Next.js API": {
+      "main": [
+        [
+          {
+            "node": "Log Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log to Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "Log Success",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "createdAt": "2025-01-08T00:00:00.000Z",
+      "updatedAt": "2025-01-08T00:00:00.000Z",
+      "id": "house31-automation",
+      "name": "house31-automation"
+    }
+  ],
+  "triggerCount": 1,
+  "updatedAt": "2025-01-08T00:00:00.000Z",
+  "versionId": "1"
+}

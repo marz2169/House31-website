@@ -1,0 +1,19 @@
+User-agent: *
+Allow: /
+
+# Optimize crawl budget
+Disallow: /api/
+Disallow: /_next/
+Disallow: /.next/
+Disallow: /admin/
+Disallow: /tmp/
+
+# Allow important files
+Allow: /api/placeholder/*
+
+# Sitemaps
+Sitemap: https://house31.com/sitemap.xml
+Sitemap: https://house31.com/sitemap-videos.xml
+
+# Crawl delay to be respectful
+Crawl-delay: 1
