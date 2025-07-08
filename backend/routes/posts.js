@@ -14,6 +14,8 @@ const {
 } = require('../middleware/validation');
 const { asyncHandler } = require('../middleware/errorHandler');
 
+console.log('Posts routes module loaded');
+
 // Public routes
 router.get('/', 
   validatePostQuery, 
@@ -29,14 +31,15 @@ router.get('/hero',
   asyncHandler(postController.getHeroPost)
 );
 
-router.get('/:slug', 
-  validateSlug, 
-  asyncHandler(postController.getPostBySlug)
-);
-
 router.get('/search', 
   validatePostQuery, 
   asyncHandler(postController.searchPosts)
+);
+
+// This MUST come last as it's a catch-all
+router.get('/:slug', 
+  validateSlug, 
+  asyncHandler(postController.getPostBySlug)
 );
 
 // Admin routes (protected)

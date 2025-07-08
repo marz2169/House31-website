@@ -18,7 +18,11 @@ export default defineConfig({
     host: true,
     strictPort: true,
     hmr: {
-      port: 5173,
+      clientPort: 3000, // Use the Docker-mapped port for HMR WebSocket
+      host: 'localhost',
+    },
+    watch: {
+      usePolling: true,
     },
   },
   build: {

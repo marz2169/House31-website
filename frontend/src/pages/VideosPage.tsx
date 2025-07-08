@@ -4,6 +4,7 @@ import VideoCard from '@/components/VideoCard'
 import { api } from '@/services/api'
 import type { Post } from '@/services/api'
 import SEO from '@/components/SEO'
+import { generateMockPosts } from '@/lib/placeholders'
 
 export default function VideosPage() {
   const [posts, setPosts] = useState<Post[]>([])
@@ -21,26 +22,8 @@ export default function VideosPage() {
       const response = await api.getPostsByCategory('videos', page, pagination.limit)
       
       if (response.posts.length === 0) {
-        // Generate mock data for videos category with better video URLs
-        const mockPosts: Post[] = Array.from({ length: 9 }, (_, i) => ({
-          _id: `video-${i + 1}`,
-          title: `Amazing Video Content ${i + 1}: Must Watch`,
-          content: 'Full video description and content...',
-          excerpt: `This incredible video showcases amazing content that will captivate your attention. Video ${i + 1} brings you exclusive insights...`,
-          category: 'videos',
-          slug: `amazing-video-content-${i + 1}`,
-          featuredImage: `https://via.placeholder.com/400x225/1a1a1a/ffffff?text=Video+${i + 1}`,
-          videoUrl: i % 3 === 0 
-            ? 'https://www.youtube.com/watch?v=dQw4w9WgXcQ' // Rick Roll for demo
-            : i % 3 === 1 
-            ? 'https://vimeo.com/90509568' // Sample Vimeo video
-            : 'https://www.youtube.com/watch?v=jNQXAC9IVRw', // Sample YouTube video
-          author: 'Video Creator',
-          publishedAt: new Date(Date.now() - i * 86400000).toISOString(),
-          createdAt: new Date(Date.now() - i * 86400000).toISOString(),
-          updatedAt: new Date(Date.now() - i * 86400000).toISOString(),
-          tags: ['video', 'entertainment', 'trending', 'must-watch'],
-        }))
+        // Generate diverse mock data for videos category
+        const mockPosts = generateMockPosts('videos', 9)
         
         setPosts(mockPosts)
         setPagination({
@@ -115,10 +98,10 @@ export default function VideosPage() {
         </div>
         
         {/* Videos Grid */}
-        <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 auto-rows-fr">
           {posts.map((post) => (
             <VideoCard 
-              key={post._id} 
+              key={`video-${post._id}`}
               video={post}
               onPlayClick={() => console.log('Playing video:', post.title)}
             />

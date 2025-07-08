@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
+import { replacePlaceholderUrl } from '../lib/placeholders'
 
 interface OptimizedImageProps {
   src: string
@@ -36,6 +37,14 @@ export default function OptimizedImage({
 
   // Generate WebP version of URL if it's a placeholder or can be converted
   const getOptimizedSrc = useCallback((originalSrc: string): string => {
+    // Replace external placeholder URLs with local data URIs
+    const processedSrc = replacePlaceholderUrl(originalSrc)
+    
+    // If it was replaced with a data URI, return it directly
+    if (processedSrc.startsWith('data:')) {
+      return processedSrc
+    }
+    
     // For placeholder images, we can request WebP format
     if (originalSrc.includes('placeholder.com') || originalSrc.includes('via.placeholder.com')) {
       return originalSrc + '&format=webp'

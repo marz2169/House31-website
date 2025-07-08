@@ -16,8 +16,10 @@ router.get('/', (req, res) => {
     endpoints: {
       posts: {
         'GET /api/posts': 'Get all posts with filtering and pagination',
+        'GET /api/posts?category=X': 'Get posts by category with pagination',
         'GET /api/posts/trending': 'Get trending posts',
         'GET /api/posts/hero': 'Get hero post',
+        'GET /api/posts/search': 'Search posts',
         'GET /api/posts/:slug': 'Get post by slug',
         'POST /api/posts': 'Create post (admin)',
         'PUT /api/posts/:id': 'Update post (admin)',

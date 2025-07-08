@@ -5,6 +5,7 @@ import { api } from '@/services/api'
 import type { Post } from '@/services/api'
 import SEO from '@/components/SEO'
 import LazyLoad from '@/components/LazyLoad'
+import { generateMockPosts, getCategoryPlaceholder } from '@/lib/placeholders'
 
 export default function EntertainmentPage() {
   const [posts, setPosts] = useState<Post[]>([])
@@ -22,21 +23,8 @@ export default function EntertainmentPage() {
       const response = await api.getPostsByCategory('entertainment', page, pagination.limit)
       
       if (response.posts.length === 0) {
-        // Generate mock data for entertainment category
-        const mockPosts: Post[] = Array.from({ length: 9 }, (_, i) => ({
-          _id: `entertainment-${i + 1}`,
-          title: `Entertainment Story ${i + 1}: Celebrity Update`,
-          content: 'Full article content...',
-          excerpt: `Latest celebrity news and entertainment updates that you need to know about story ${i + 1}...`,
-          category: 'entertainment',
-          slug: `entertainment-story-${i + 1}`,
-          featuredImage: `https://via.placeholder.com/400x200?text=Entertainment+${i + 1}`,
-          author: 'Entertainment Reporter',
-          publishedAt: new Date(Date.now() - i * 10800000).toISOString(),
-          createdAt: new Date(Date.now() - i * 10800000).toISOString(),
-          updatedAt: new Date(Date.now() - i * 10800000).toISOString(),
-          tags: ['entertainment', 'celebrity', 'hollywood'],
-        }))
+        // Generate diverse mock data for entertainment category
+        const mockPosts = generateMockPosts('entertainment', 9)
         
         setPosts(mockPosts)
         setPagination({
@@ -91,26 +79,26 @@ export default function EntertainmentPage() {
           <p className="text-gray-600">Discover the latest in movies, TV shows, and celebrity news</p>
         </div>
         
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-fr">
           {posts.map((post) => (
-            <Link key={post._id} to={`/post/${post.slug}`} className="block">
-              <article className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+            <Link key={`entertainment-${post._id}`} to={`/post/${post.slug}`} className="block">
+              <article className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow h-full flex flex-col">
                 <LazyLoad height={192}>
                   <img 
-                    src={post.featuredImage || `https://via.placeholder.com/400x200?text=Entertainment`}
+                    src={post.featuredImage || getCategoryPlaceholder('entertainment', 400, 200)}
                     alt={post.title}
                     className="w-full h-48 object-cover"
                   />
                 </LazyLoad>
-                <div className="p-6">
-                  <span className="inline-block bg-purple-100 text-purple-800 text-xs font-semibold px-2.5 py-0.5 rounded-full mb-2">
+                <div className="p-6 flex-1 flex flex-col">
+                  <span className="inline-block bg-purple-100 text-purple-800 text-xs font-semibold px-2.5 py-0.5 rounded-full mb-2 w-fit">
                     Entertainment
                   </span>
-                  <h2 className="text-xl font-bold mb-2 line-clamp-2">{post.title}</h2>
-                  <p className="text-gray-600 mb-4 line-clamp-3">
+                  <h2 className="text-xl font-bold mb-2 line-clamp-2 flex-shrink-0">{post.title}</h2>
+                  <p className="text-gray-600 mb-4 line-clamp-3 flex-1">
                     {post.excerpt}
                   </p>
-                  <div className="flex justify-between items-center">
+                  <div className="flex justify-between items-center mt-auto">
                     <span className="text-sm text-gray-500">
                       {new Date(post.publishedAt).toLocaleDateString()}
                     </span>

@@ -5,6 +5,7 @@ import { api } from '@/services/api'
 import type { Post } from '@/services/api'
 import SEO from '@/components/SEO'
 import LazyLoad from '@/components/LazyLoad'
+import { generateMockPosts, getCategoryPlaceholder } from '@/lib/placeholders'
 
 export default function NewsPage() {
   const [posts, setPosts] = useState<Post[]>([])
@@ -22,21 +23,8 @@ export default function NewsPage() {
       const response = await api.getPostsByCategory('news', page, pagination.limit)
       
       if (response.posts.length === 0) {
-        // Generate mock data for news category
-        const mockPosts: Post[] = Array.from({ length: 9 }, (_, i) => ({
-          _id: `news-${i + 1}`,
-          title: `Breaking News Story ${i + 1}: Important Update`,
-          content: 'Full article content...',
-          excerpt: `This is breaking news story number ${i + 1} with important updates that you need to know about...`,
-          category: 'news',
-          slug: `breaking-news-story-${i + 1}`,
-          featuredImage: `https://via.placeholder.com/400x200?text=News+${i + 1}`,
-          author: 'News Reporter',
-          publishedAt: new Date(Date.now() - i * 7200000).toISOString(),
-          createdAt: new Date(Date.now() - i * 7200000).toISOString(),
-          updatedAt: new Date(Date.now() - i * 7200000).toISOString(),
-          tags: ['breaking', 'news', 'important'],
-        }))
+        // Generate diverse mock data for news category
+        const mockPosts = generateMockPosts('news', 9)
         
         setPosts(mockPosts)
         setPagination({
@@ -91,26 +79,26 @@ export default function NewsPage() {
           <p className="text-gray-600">Stay informed with the latest breaking news and current events</p>
         </div>
         
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-fr">
           {posts.map((post) => (
-            <Link key={post._id} to={`/post/${post.slug}`} className="block">
-              <article className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+            <Link key={`news-${post._id}`} to={`/post/${post.slug}`} className="block">
+              <article className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow h-full flex flex-col">
                 <LazyLoad height={192}>
                   <img 
-                    src={post.featuredImage || `https://via.placeholder.com/400x200?text=News`}
+                    src={post.featuredImage || getCategoryPlaceholder('news', 400, 200)}
                     alt={post.title}
                     className="w-full h-48 object-cover"
                   />
                 </LazyLoad>
-                <div className="p-6">
-                  <span className="inline-block bg-red-100 text-red-800 text-xs font-semibold px-2.5 py-0.5 rounded-full mb-2">
+                <div className="p-6 flex-1 flex flex-col">
+                  <span className="inline-block bg-red-100 text-red-800 text-xs font-semibold px-2.5 py-0.5 rounded-full mb-2 w-fit">
                     Breaking
                   </span>
-                  <h2 className="text-xl font-bold mb-2 line-clamp-2">{post.title}</h2>
-                  <p className="text-gray-600 mb-4 line-clamp-3">
+                  <h2 className="text-xl font-bold mb-2 line-clamp-2 flex-shrink-0">{post.title}</h2>
+                  <p className="text-gray-600 mb-4 line-clamp-3 flex-1">
                     {post.excerpt}
                   </p>
-                  <div className="flex justify-between items-center">
+                  <div className="flex justify-between items-center mt-auto">
                     <span className="text-sm text-gray-500">
                       {new Date(post.publishedAt).toLocaleDateString()}
                     </span>

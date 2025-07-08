@@ -94,8 +94,9 @@ export const api = {
     limit = 12
   ): Promise<{ posts: Post[]; pagination: { page: number; limit: number; total: number; pages: number } }> => {
     try {
+      // Use the working posts endpoint with category query parameter
       const response = await apiRequest<PaginatedResponse<Post>>(
-        `/posts/category/${category}?page=${page}&limit=${limit}`
+        `/posts?category=${category}&page=${page}&limit=${limit}`
       )
       return response.data
     } catch (error) {

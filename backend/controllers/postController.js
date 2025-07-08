@@ -92,6 +92,63 @@ exports.getAllPosts = async (req, res) => {
   }
 };
 
+// GET /api/posts/category/:category - Get posts by category with pagination
+exports.getPostsByCategory = async (req, res) => {
+  try {
+    const { category } = req.params;
+    const {
+      status = 'published',
+      page = 1,
+      limit = 12,
+      sort = '-publishedAt'
+    } = req.query;
+
+    // Build query
+    const query = { 
+      status,
+      category: category.toLowerCase()
+    };
+
+    // Calculate pagination
+    const skip = (parseInt(page) - 1) * parseInt(limit);
+    
+    // Get posts and total count
+    const [posts, total] = await Promise.all([
+      Post.find(query)
+        .sort(sort)
+        .skip(skip)
+        .limit(parseInt(limit))
+        .populate('author', 'name')
+        .select('-content'), // Exclude full content for list view
+      Post.countDocuments(query)
+    ]);
+
+    res.json({
+      success: true,
+      data: {
+        posts: posts.map(post => ({
+          ...post.toObject(),
+          url: `/post/${post.slug}`,
+          readingTime: `${Math.ceil(post.content?.split(/\s+/).length / 200) || 1} min read`
+        })),
+        pagination: {
+          page: parseInt(page),
+          limit: parseInt(limit),
+          total,
+          pages: Math.ceil(total / parseInt(limit))
+        }
+      }
+    });
+  } catch (error) {
+    console.error('Error fetching posts by category:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch posts by category',
+      error: error.message
+    });
+  }
+};
+
 // GET /api/posts/:slug - Get a single post by slug
 exports.getPostBySlug = async (req, res) => {
   try {
