@@ -72,7 +72,7 @@ export function HeroSection() {
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             Stay updated with the latest breaking news and trending stories from around the world. 
-            Discover what's shaping our future today.
+            Discover what&apos;s shaping our future today.
           </p>
         </div>
 

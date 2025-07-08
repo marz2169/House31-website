@@ -14,7 +14,7 @@ interface TrendingVideo {
 }
 
 // Mock data for trending videos
-const trendingVideos: TrendingVideo[] = [
+const mockTrendingVideos: TrendingVideo[] = [
   {
     id: 1,
     title: "AI-Powered Military Drones Transform Modern Warfare",
@@ -104,7 +104,7 @@ export async function TrendingVideos() {
 
       {/* Trending Videos Grid */}
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
-        {trendingVideos.map((video, index) => (
+        {trendingVideos.map((video) => (
             <Link 
               key={video.id} 
               href={`/video/${video.slug}`}

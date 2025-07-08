@@ -83,7 +83,7 @@ export function ExitIntentModal({ isOpen, onClose }: ExitIntentModalProps) {
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-xl">
             <Mail className="h-5 w-5 text-primary" />
-            Wait! Don't Miss Out
+            Wait! Don&apos;t Miss Out
           </DialogTitle>
           <DialogDescription className="text-muted-foreground">
             {isSubmitted 

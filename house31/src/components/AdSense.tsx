@@ -44,10 +44,10 @@ export function AdSense({
     }
 
     // Check if AdSense is available
-    if (typeof window !== 'undefined' && (window as any).adsbygoogle) {
+    if (typeof window !== 'undefined' && (window as Record<string, unknown>).adsbygoogle) {
       try {
         // Push the ad configuration
-        ((window as any).adsbygoogle = (window as any).adsbygoogle || []).push({})
+        (((window as Record<string, unknown>).adsbygoogle as unknown[]) = ((window as Record<string, unknown>).adsbygoogle as unknown[]) || []).push({})
         hasAdLoaded.current = true
         
         // Track ad load attempt

@@ -5,8 +5,8 @@ import { usePathname, useSearchParams } from 'next/navigation'
 
 declare global {
   interface Window {
-    gtag: (command: string, ...args: any[]) => void
-    dataLayer: any[]
+    gtag: (command: string, ...args: unknown[]) => void
+    dataLayer: unknown[]
   }
 }
 
@@ -31,8 +31,8 @@ class Analytics {
 
     // Create dataLayer
     window.dataLayer = window.dataLayer || []
-    window.gtag = function gtag() {
-      window.dataLayer.push(arguments)
+    window.gtag = function gtag(...args: unknown[]) {
+      window.dataLayer.push(args)
     }
 
     // Configure GA
@@ -68,7 +68,7 @@ class Analytics {
   }
 
   // Track custom events
-  event(action: string, parameters: Record<string, any> = {}) {
+  event(action: string, parameters: Record<string, unknown> = {}) {
     if (!this.initialized) return
 
     window.gtag('event', action, {
@@ -82,7 +82,7 @@ class Analytics {
   }
 
   // Track custom events (alias for event method)
-  trackEvent(action: string, parameters: Record<string, any> = {}) {
+  trackEvent(action: string, parameters: Record<string, unknown> = {}) {
     return this.event(action, parameters)
   }
 
@@ -167,7 +167,7 @@ class Analytics {
     })
   }
 
-  private log(...args: any[]) {
+  private log(...args: unknown[]) {
     if (this.debug) {
       console.log('[Analytics]', ...args)
     }
