@@ -8,6 +8,12 @@
       "maxDuration": 30
     }
   },
+  "crons": [
+    {
+      "path": "/api/facebook-sync/cron",
+      "schedule": "0 */4 * * *"
+    }
+  ],
   "redirects": [
     {
       "source": "/videos/:slug*",

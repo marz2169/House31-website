@@ -55,9 +55,18 @@ Add these to your Vercel project settings:
 ```env
 NEXT_PUBLIC_SITE_URL=https://house31.vercel.app
 NEXT_PUBLIC_SITE_NAME=House31
+CRON_SECRET=generate_random_32_char_string
 ```
 
-**Optional (for Analytics & Ads):**
+**Facebook Integration (Optional but Recommended):**
+```env
+FACEBOOK_PAGE_ID=your_facebook_page_id
+FACEBOOK_PAGE_ACCESS_TOKEN=your_page_access_token
+FACEBOOK_APP_ID=your_facebook_app_id
+FACEBOOK_APP_SECRET=your_facebook_app_secret
+```
+
+**Analytics & Ads (Optional):**
 ```env
 NEXT_PUBLIC_GA_TRACKING_ID=G-XXXXXXXXXX
 NEXT_PUBLIC_ADSENSE_CLIENT=ca-pub-XXXXXXXXXXXXXXXX
@@ -68,6 +77,34 @@ NEXT_PUBLIC_GOOGLE_VERIFICATION_CODE=your-verification-code
 1. Click **"Deploy"**
 2. Wait for build to complete
 3. Your site will be live at `https://house31.vercel.app`
+
+## 📱 Facebook Auto-Sync Setup
+
+### Quick Setup (5 minutes)
+1. **Visit Setup Page**: Go to `https://your-domain.com/admin/facebook-setup`
+2. **Create Facebook App**: Follow the guided setup
+3. **Get Tokens**: Use the built-in token generator
+4. **Add to Vercel**: Copy environment variables to Vercel
+5. **Test**: Verify sync is working
+
+### What It Does
+- ✅ **Auto-syncs** your Facebook posts every 4 hours
+- ✅ **Smart filtering** based on House31's niche (AI, military, conspiracy, space, tech)
+- ✅ **SEO optimization** with automatic titles, descriptions, and slugs
+- ✅ **Content categorization** with priority scoring
+- ✅ **Viral content detection** using engagement keywords
+- ✅ **Backup system** to prevent data loss
+
+### Content Categories Detected
+- **🎯 High Priority**: Military tech, AI breakthroughs, conspiracy theories, viral content
+- **📊 Medium Priority**: Space exploration, general tech news
+- **🚫 Filtered Out**: Personal posts, unrelated content, low-engagement posts
+
+### Automatic Features
+- **Title Generation**: Creates engaging, click-worthy titles
+- **View Count Simulation**: Generates realistic view counts based on content type
+- **Thumbnail Optimization**: Uses best available images from Facebook
+- **SEO Slugs**: Creates search-friendly URLs automatically
 
 ## 📊 Performance Testing
 
